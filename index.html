@@ -1,7 +1,27 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="en">
+<head>
+
+
+    <!-- Google AdSense -->
+    <meta name="google-adsense-account" content="ca-pub-7963880628277539">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7963880628277539" crossorigin="anonymous"></script>
+
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PGR4Y0TVNP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-PGR4Y0TVNP');
+    </script>
+
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Kapital Kings</title>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at 30% 20%,#1d3557,#0b1320);color:#fff;min-height:100vh;overflow-x:hidden}
@@ -54,13 +74,14 @@ header b{font-size:18px}header .sp{flex:1}header button{padding:6px 10px;min-hei
 #modal li{margin:6px 0}#modal code{background:#0b1320;padding:2px 5px;border-radius:4px;font-size:12px}
 .cf{position:fixed;top:-30px;font-size:24px;animation:fall 3.5s linear forwards;z-index:60}@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 @media(max-width:900px){.main{flex-direction:column}.side{width:100%}.board{width:100%}#players{flex-direction:row;overflow-x:auto}.pc{min-width:170px}}
+textarea{width:100%;height:90px;border-radius:8px;border:0;background:#0b1320;color:#fff;font-size:11px;word-break:break-all;margin:4px 0}#emo button{padding:4px 10px;min-height:36px}
 </style></head><body>
 
 <section id="menu" class="scr on center">
  <div class="logo">🎩 KAPITAL KINGS</div>
  <div class="menu">
   <button onclick="A.sfx('click');go('setup')">🤖 Human vs AI</button>
-  <button class="alt" onclick="onlineInfo()">🌐 Online Multiplayer</button>
+  <button class="alt" onclick="netMenu()">🌐 Online Multiplayer</button>
   <button class="alt" onclick="howTo()">📖 Instructions</button>
   <button class="alt" onclick="settings()">⚙️ Settings</button>
  </div>
@@ -83,19 +104,23 @@ header b{font-size:18px}header .sp{flex:1}header button{padding:6px 10px;min-hei
   <button class="alt" id="snd" onclick="A.toggle()">🔊</button><button class="alt" onclick="fs()">⛶</button><button class="alt" onclick="howTo()">❓</button><button class="alt" onclick="settings()">⚙️</button><button class="alt" onclick="exitGame()">✖</button></header>
  <div class="main">
   <div class="bw"><div class="board" id="board"><div class="mid"><div class="t">KAPITAL KINGS</div><div id="dice"><span class="die">⚀</span><span class="die">⚀</span></div><div id="msg"></div></div><div id="card"><div></div></div></div></div>
-  <div class="side"><div id="act"></div><div id="players"></div><div id="log"></div></div>
+  <div class="side"><div id="act"></div><div id="emo" style="display:none;gap:4px;flex-wrap:wrap"></div><div id="players"></div><div id="log"></div></div>
  </div>
 </section>
 
 <section id="over" class="scr center"><div class="logo">🏆 Game Over</div><div class="panel" id="rank"></div>
  <div><button onclick="go('setup')">Play Again</button> <button class="alt" onclick="go('menu')">Main Menu</button></div></section>
 
+<section id="lobby" class="scr center"><div class="logo" style="font-size:36px">🌐 Lobby</div>
+<div class="panel"><p>Room: <b id="lroom" style="color:#f9d65c;font-size:22px"></b></p><div id="lpl"></div>
+<div id="lhost"><p>AI fill-ins: <input type="number" id="lai" min="0" max="8" value="0" style="width:60px"></p><button class="alt" onclick="shareRoom()">🔗 Copy invite link</button> <button onclick="startOnline()">▶ Start game</button></div>
+<p style="font-size:12px;opacity:.75">Friends join with this room code via Online Multiplayer → Join.</p><p><button class="alt" onclick="leaveLobby()">Leave</button></p></div></section>
 <div id="modal"></div>
 
 <script>
 'use strict';
 /* ============ ONLINE CONFIG (see Online Multiplayer dialog) ============ */
-const NET_CONFIG={signalingUrl:'',iceServers:[{urls:'stun:stun.l.google.com:19302'}],turn:{urls:'',username:'',credential:''}};
+const NET_CONFIG={peerServer:null/* optional own PeerJS server {host,port,path,secure}; null = free public PeerJS broker */,iceServers:[{urls:'stun:stun.l.google.com:19302'}],turn:{urls:'',username:'',credential:''}};
 
 /* ============ BOARD DATA ============ */
 const GC={br:'#8b5a3c',lb:'#9ad7f5',pk:'#e25fa7',or:'#f39c34',rd:'#e03c3c',ye:'#f6e04a',gr:'#2ea25a',bl:'#2b52c9'};
@@ -121,8 +146,8 @@ const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a
 const go=id=>{$$('.scr').forEach(s=>s.classList.toggle('on',s.id==id));A.mode=id=='game'?'game':'menu'};
 const show=h=>{const m=$('#modal');m.innerHTML='<div class="box">'+h+'</div>';m.style.display='flex'};
 const hide=()=>{$('#modal').style.display='none';$('#modal').onclick=null};
-const log=t=>{const l=$('#log');l.insertAdjacentHTML('afterbegin','<div>'+t+'</div>');while(l.children.length>60)l.lastChild.remove()};
-const say=t=>$('#msg').textContent=t;
+const log=t=>{NET.bc({t:'log',h:t});const l=$('#log');l.insertAdjacentHTML('afterbegin','<div>'+t+'</div>');while(l.children.length>60)l.lastChild.remove()};
+const say=t=>{$('#msg').textContent=t;NET.bc({t:'say',x:t})};
 const fs=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
 
 /* ============ AUDIO ENGINE (Web Audio, all synthesized) ============ */
@@ -141,6 +166,7 @@ const A={ctx:null,on:true,mv:.5,sv:.7,mode:'menu',
    if(g||s%2==0)this.tone(p[s%4]*(g?1:.5),.5,g?'triangle':'sine',.5,this.mg);if(g&&s%4==0)this.tone(p[0]/2,.9,'sine',.6,this.mg);s++},300)}
 };
 A.load();document.addEventListener('pointerdown',()=>A.init());
+{const _s=A.sfx.bind(A);A.sfx=n=>{_s(n);if(n!='click')NET.bc({t:'sfx',n})}}
 
 /* ============ GAME ENGINE ============ */
 const cur=()=>G.pl[G.t];
@@ -171,10 +197,10 @@ function buildBoard(){const b=$('#board');$$('.c').forEach(e=>e.remove());
   d.innerHTML=`<div class="bar" style="background:${GC[s[3]]||'transparent'}"></div><div class="nm">${IC[s[1]]||''}${s[0]}</div><div class="pr">${s[2]?'$'+s[2]:''}</div><div class="tk"></div>`;b.appendChild(d)})}
 function uc(i){const d=$('#c'+i),h=G.houses[i],o=G.owner[i];d.style.boxShadow=o>=0?`inset 0 0 0 3px ${G.pl[o].col}`:'';d.style.opacity=G.mort[i]?.45:1;
  if(S[i][1]=='p')d.querySelector('.bar').textContent=h==5?'🏨':'🏠'.repeat(h)}
-function tokens(){$$('.tk').forEach(e=>e.innerHTML='');G.pl.forEach(p=>{if(!p.out)$('#c'+p.pos+' .tk').insertAdjacentHTML('beforeend',`<span class="tkn" style="background:${p.col}">${p.av}</span>`)})}
-function dash(){$('#players').innerHTML=G.pl.map((p,i)=>`<div class="pc ${i==G.t?'act':''} ${p.out?'out':''}" style="border-color:${p.col}"><span class="av">${p.av}</span><span><b>${p.name}</b>${p.ai?`<i>${p.pers}</i>`:''}</span><span class="cash">$${p.money}</span><small>🏘 ${props(p).length} · 🏠 ${hs(p)} · 📍 ${S[p.pos][0]}${p.jail?' 🔒 Jail':''}${p.gojf?' 🎟':''}</small></div>`).join('');
+function tokens(){NET.bc({t:'st',s:snap()});$$('.tk').forEach(e=>e.innerHTML='');G.pl.forEach(p=>{if(!p.out)$('#c'+p.pos+' .tk').insertAdjacentHTML('beforeend',`<span class="tkn" style="background:${p.col}">${p.av}</span>`)})}
+function dash(){NET.bc({t:'st',s:snap()});$('#players').innerHTML=G.pl.map((p,i)=>`<div class="pc ${i==G.t?'act':''} ${p.out?'out':''}" style="border-color:${p.col}"><span class="av">${p.av}</span><span><b>${p.name}</b>${p.ai?`<i>${p.pers}</i>`:''}</span><span class="cash">$${p.money}</span><small>🏘 ${props(p).length} · 🏠 ${hs(p)} · 📍 ${S[p.pos][0]}${p.jail?' 🔒 Jail':''}${p.gojf?' 🎟':''}</small></div>`).join('');
  $('#turn').textContent=`${cur().av} ${cur().name}'s turn`+(G.rules.pot?` · Jackpot $${G.pot}`:'')}
-const ask=(m,o)=>{say(m);return new Promise(res=>{const a=$('#act');a.innerHTML='';o.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{A.sfx('click');a.innerHTML='';res(i)};a.appendChild(b)})})};
+const ask=(m,o,p)=>{say(NET.role&&p?p.name+': '+m:m);if(p&&p.net)return new Promise(res=>{$('#act').innerHTML='';p.net.resolve=i=>{p.net.resolve=null;res(Math.min(Math.max(i|0,0),o.length-1))};NET.to(p.net,{t:'ask',m,o})});return new Promise(res=>{const a=$('#act');a.innerHTML='';o.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{A.sfx('click');a.innerHTML='';res(i)};a.appendChild(b)})})};
 
 /* ---- Money & bankruptcy ---- */
 function raise(p,a){while(p.money<a){let i=props(p).filter(j=>G.houses[j]>0).sort((x,y)=>G.houses[y]-G.houses[x])[0];if(i!=null){ACT.s(i,p);continue}i=props(p).find(j=>!G.mort[j]);if(i==null)return;ACT.m(i,p)}}
@@ -194,7 +220,7 @@ function aiBuy(p,i){const D=p.D,s=S[i];if(p.money<s[2])return false;const comp=s
 async function land(p,r){const s=S[p.pos],t=s[1],i=p.pos;
  if(t=='p'||t=='rr'||t=='u'){const o=G.owner[i];
   if(o<0){let buy;if(p.ai){say(`🤔 ${p.name} is thinking…`);await sleep(900);buy=aiBuy(p,i)}
-   else if(p.money>=s[2])buy=(await ask(`Buy ${s[0]} for $${s[2]}?`,['💵 Buy','Pass']))==0;else{log('You cannot afford '+s[0]);buy=false}
+   else if(p.money>=s[2])buy=(await ask(`Buy ${s[0]} for $${s[2]}?`,['💵 Buy','Pass'],p))==0;else{log('You cannot afford '+s[0]);buy=false}
    if(buy){p.money-=s[2];G.owner[i]=p.id;A.sfx('buy');log(`🏠 ${p.name} bought ${s[0]} ($${s[2]})`);uc(i);if(s[1]=='p'&&full(p.id,i))log(`🌈 ${p.name} completed a color group!`)}else log(`${p.name} passed on ${s[0]}`)}
   else if(o!=p.id&&!G.mort[i]){const a=rent(i,r);log(`💸 ${p.name} pays $${a} rent to ${G.pl[o].name}`);A.sfx('cash');pay(p,a,G.pl[o])}}
  else if(t=='tax'){log(`${p.name} pays $${s[2]} tax`);if(pay(p,s[2],null)&&G.rules.pot)G.pot+=s[2]}
@@ -204,8 +230,8 @@ async function land(p,r){const s=S[p.pos],t=s[1],i=p.pos;
  dash();await sleep(300)}
 
 async function draw(p,t){const deck=t=='cc'?CC:CH,d=G.dk[t],c=deck[d.o[d.n++%16]];
- const cd=$('#card');cd.firstChild.style.background=t=='cc'?'#ffd36b':'#ff9a76';cd.firstChild.textContent=(t=='cc'?'📦 ':'❓ ')+c[0];cd.style.display='block';cd.firstChild.style.animation='none';cd.firstChild.offsetWidth;cd.firstChild.style.animation='';
- A.sfx('card');log(`🃏 ${p.name}: ${c[0]}`);await sleep(2000);cd.style.display='none';
+ NET.bc({t:'card',k:t,c:c[0]});const cd=$('#card');cd.firstChild.style.background=t=='cc'?'#ffd36b':'#ff9a76';cd.firstChild.textContent=(t=='cc'?'📦 ':'❓ ')+c[0];cd.style.display='block';cd.firstChild.style.animation='none';cd.firstChild.offsetWidth;cd.firstChild.style.animation='';
+ A.sfx('card');log(`🃏 ${p.name}: ${c[0]}`);await sleep(2000);NET.bc({t:'card'});cd.style.display='none';
  switch(c[1]){
   case 'm':if(c[2]>0){p.money+=c[2];A.sfx('cash')}else pay(p,-c[2],null);break;
   case 'a':if(c[2]<p.pos){p.money+=200;log('Passed GO (+$200)')}await place(p,c[2]);await land(p,0);break;
@@ -219,18 +245,18 @@ async function draw(p,t){const deck=t=='cc'?CC:CH,d=G.dk[t],c=deck[d.o[d.n++%16]
 /* ---- Dice ---- */
 async function rollDice(){A.sfx('dice');const ds=$$('.die'),F='⚀⚁⚂⚃⚄⚅';ds.forEach(d=>d.classList.add('sh'));
  for(let k=0;k<10;k++){ds.forEach(d=>d.textContent=F[Math.random()*6|0]);await sleep(70)}
- const r=[1+Math.random()*6|0,1+Math.random()*6|0];ds.forEach((d,i)=>{d.classList.remove('sh');d.textContent=F[r[i]-1]});return r}
+ const r=[1+Math.random()*6|0,1+Math.random()*6|0];NET.bc({t:'dice',r});ds.forEach((d,i)=>{d.classList.remove('sh');d.textContent=F[r[i]-1]});return r}
 
 /* ---- Turn flow ---- */
-function manage(p){return new Promise(res=>{
+function manage(p){if(p.net)return new Promise(res=>{p.net.mres=()=>{p.net.mres=null;res()};NET.to(p.net,{t:'manage'})});return new Promise(res=>{
  const draw=()=>{const rows=props(p).map(i=>{const s=S[i],h=G.houses[i];return `<div class="row"><span><i class="sw" style="background:${GC[s[3]]||'#888'}"></i>${s[0]} ${h==5?'🏨':'🏠'.repeat(h)}${G.mort[i]?' (mortgaged)':''}</span><span>`+
   (s[1]=='p'?`<button data-a="b" data-i="${i}" ${canB(i,p)?'':'disabled'}>Build $${HC(i)}</button><button data-a="s" data-i="${i}" ${canS(i,p)?'':'disabled'}>Sell</button>`:'')+
   (G.mort[i]?`<button data-a="u" data-i="${i}" ${canU(i,p)?'':'disabled'}>Unmortgage $${Math.ceil(s[2]*.55)}</button>`:`<button data-a="m" data-i="${i}" ${canM(i,p)?'':'disabled'}>Mortgage +$${s[2]/2}</button>`)+'</span></div>'}).join('')||'<p>You own no properties yet.</p>';
   show(`<h2>Manage Properties</h2><p>Cash: <b>$${p.money}</b>. Build evenly across a full color group.</p>${rows}<p><button data-a="x">Close</button></p>`)};
- $('#modal').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a;if(a=='x'){hide();res();return}ACT[a](+b.dataset.i,p);draw()};draw()})}
+ $('#modal').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a;if(a=='x'){NET.redraw=null;hide();if(NET.role=='client')NET.send({t:'mclose'});res();return}if(NET.role=='client'){NET.send({t:'act',a,i:+b.dataset.i});return}ACT[a](+b.dataset.i,p);draw()};NET.redraw=draw;draw()})}
 function leaveJail(p,card){if(card)p.gojf--;else if(!pay(p,50,null))return;p.jail=0;log(`🔓 ${p.name} leaves jail`);dash()}
 async function humanPre(p){for(;;){const o=['🎲 Roll','🏗 Manage'];if(p.jail){o.push('Pay $50');if(p.gojf)o.push('🎟 Use card')}
-  const c=await ask(p.jail?'You are in jail: roll doubles, pay $50, or use a card.':'Your turn — roll the dice!',o);
+  const c=await ask(p.jail?'You are in jail: roll doubles, pay $50, or use a card.':'Your turn — roll the dice!',o,p);
   if(c==0)return;if(c==1){await manage(p);continue}if(o[c]=='Pay $50'){if(p.money>=50){leaveJail(p);return}say('Not enough cash');continue}leaveJail(p,1);return}}
 async function aiPre(p){say(`${p.name} (${p.pers}) is planning…`);await sleep(700);const D=p.D;
  for(const i of props(p))if(G.mort[i]&&p.money>D.res+S[i][2]+150&&canU(i,p))ACT.u(i,p);
@@ -245,20 +271,21 @@ async function takeTurn(p){let dbl=0;
   await move(p,a+b);await land(p,a+b);
   if(p.out||G.over||p.jail||!d)return;say('Doubles — roll again!');await sleep(600)}}
 async function loop(){try{while(!G.over){const p=cur();if(!p.out){await takeTurn(p);
-   if(!p.ai&&!p.out&&!G.over)for(;;){const c=await ask('Anything else before ending your turn?',['✅ End Turn','🏗 Manage']);if(c==0)break;await manage(p)}}
+   if(!p.ai&&!p.out&&!G.over)for(;;){const c=await ask('Anything else before ending your turn?',['✅ End Turn','🏗 Manage'],p);if(c==0)break;await manage(p)}}
   if(G.over)break;do{G.t=(G.t+1)%G.pl.length}while(G.pl[G.t].out);dash();await sleep(250)}}catch(e){if(e!=='stop')console.error(e)}}
 
 /* ============ UI / SCREENS ============ */
 let myAv=0;
 function avs(){$('#avs').innerHTML=AV.map((a,i)=>`<button class="alt ${i==myAv?'sel':''}" onclick="myAv=${i};avs()">${a}</button>`).join('')}avs();
 function startGame(){A.init();A.sfx('click');const n=+$('#nai').value,D=DIFF[$('#df').value],cash=+$('#sm').value;
- const pl=[{name:($('#pn').value||'Player').slice(0,14),av:AV[myAv],ai:false}];
+ const pl=[{name:($('#pn').value||'Player').replace(/[<>&"']/g,'').slice(0,14),av:AV[myAv],ai:false}];
  const avs2=shuffle(AV.filter((a,i)=>i!=myAv));for(let i=0;i<n;i++){const pr=PERS[Math.random()*5|0];pl.push({name:AIN[i],av:avs2[i],ai:true,D,pers:pr[0],mod:pr[1]})}
- pl.forEach((p,i)=>Object.assign(p,{id:i,col:COL[i],money:cash,pos:0,jail:0,jt:0,gojf:0,out:false}));
- G={pl,t:0,owner:Array(40).fill(-1),houses:Array(40).fill(0),mort:Array(40).fill(0),pot:0,over:false,order:[],rules:{pot:$('#pot').checked},dk:{cc:{o:shuffle([...Array(16).keys()]),n:0},ch:{o:shuffle([...Array(16).keys()]),n:0}}};
- $('#mode').textContent=`Human vs AI · ${$('#df').value}`;$('#log').innerHTML='';buildBoard();go('game');tokens();dash();log('🎩 Game started — good luck!');loop()}
-function exitGame(){if(confirm('Exit the current game?')){if(G)G.over=true;hide();go('menu')}}
-function over(w){A.sfx('win');const rk=[w,...G.order.slice().reverse()];
+ initGame(pl,cash,$('#pot').checked,`Human vs AI · ${$('#df').value}`)}
+function initGame(pl,cash,pot,label){pl.forEach((p,i)=>{Object.assign(p,{id:i,col:COL[i],money:cash,pos:0,jail:0,jt:0,gojf:0,out:false});if(p.net){p.net.pid=i;NET.to(p.net,{t:'you',id:i})}});
+ G={pl,t:0,owner:Array(40).fill(-1),houses:Array(40).fill(0),mort:Array(40).fill(0),pot:0,over:false,order:[],rules:{pot},dk:{cc:{o:shuffle([...Array(16).keys()]),n:0},ch:{o:shuffle([...Array(16).keys()]),n:0}}};
+ $('#mode').textContent=label;NET.bc({t:'start',label});$('#emo').style.display=NET.role?'flex':'none';$('#log').innerHTML='';buildBoard();go('game');tokens();dash();log('🎩 Game started — good luck!');loop()}
+function exitGame(){if(confirm('Exit the current game?')){if(G)G.over=true;NET.close();hide();go('menu')}}
+function over(w){NET.bc({t:'st',s:snap()});NET.bc({t:'over',w:w.id});A.sfx('win');const rk=[w,...G.order.slice().reverse()];
  $('#rank').innerHTML=`<h2 style="margin-top:0">${w.av} ${w.name} wins!</h2>`+rk.map((p,i)=>`<div class="row"><span>#${i+1} ${p.av} ${p.name}${p.ai?' (AI)':''}</span><span>${p.out?'Bankrupt':'Net worth $'+worth(p)} · ${props(p).length} props</span></div>`).join('');
  go('over');for(let i=0;i<70;i++){const e=document.createElement('div');e.className='cf';e.textContent=['🎉','🪙','⭐','🎊'][i%4];e.style.left=Math.random()*100+'vw';e.style.animationDelay=Math.random()*1.5+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),5500)}}
 function settings(){show(`<h2>Settings</h2><label>Music volume <input type="range" min="0" max="100" value="${A.mv*100}" oninput="A.mv=this.value/100;A.save();A.vol()" style="width:100%"></label><label>Effects volume <input type="range" min="0" max="100" value="${A.sv*100}" oninput="A.sv=this.value/100;A.save();A.vol()" style="width:100%"></label><p><button onclick="A.toggle();settings()">Sound: ${A.on?'ON':'OFF'}</button> <button class="alt" onclick="hide()">Close</button></p>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
@@ -267,7 +294,77 @@ function howTo(){show(`<h2>📖 How to Play</h2><ol>
 <li>🏠 <b>Buy</b> an unowned property you land on, or pass (it stays unowned in this build).</li><li>💸 <b>Rent:</b> land on someone's property and you pay. Full color group = double; houses and hotels raise it a lot. Railways and utilities scale with how many are owned.</li>
 <li>🏗 <b>Build</b> via Manage once you own a whole color group. Build evenly; 4 houses, then a hotel.</li><li>🤝 <b>Trading</b> is not in this build.</li><li>🃏 <b>Chance / Community Chest</b> draw a card with a surprise.</li>
 <li>🔒 <b>Jail:</b> roll doubles, pay $50, or use a Get Out of Jail card. After 3 failed tries you pay $50.</li><li>🏦 <b>Mortgage</b> a property (no houses) for half its price; unmortgage for price + 10%.</li><li>💥 <b>Bankruptcy:</b> if you can't pay even after selling houses and mortgaging, you are out and your assets go to the creditor.</li>
-<li>🏆 <b>Win</b> when everyone else is bankrupt.</li><li>🌐 <b>Multiplayer:</b> needs a signaling server (see Online Multiplayer).</li></ol><button onclick="hide()">Got it!</button>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
-function onlineInfo(){show(`<h2>🌐 Online Multiplayer</h2><p><b>Not included in this build.</b> Real internet play over WebRTC DataChannels needs infrastructure a single HTML file cannot provide, so no fake lobby is shown.</p><ul><li><b>Signaling server</b> (WebSocket) to relay SDP offers/answers and ICE candidates per room ID. Set <code>NET_CONFIG.signalingUrl</code>.</li><li><b>STUN</b>: a public server is preconfigured in <code>NET_CONFIG.iceServers</code>.</li><li><b>TURN</b> (e.g. coturn) for strict NATs: fill <code>NET_CONFIG.turn</code> with url, username and credential.</li><li>Planned design: the host runs the game engine and validates every action; guests send intents only.</li></ul><button onclick="hide()">Close</button>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
+<li>🏆 <b>Win</b> when everyone else is bankrupt.</li><li>🌐 <b>Multiplayer:</b> create a room, share the room code (or invite link), and friends join with it. The host's browser runs the game.</li></ol><button onclick="hide()">Got it!</button>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
+/* ============ NETWORKING: serverless WebRTC DataChannels, manual code-swap signaling ============ */
+/* Host-authoritative: only the host runs the engine. Guests receive state snapshots and send intents (answers, build/mortgage requests, chat). */
+const EMO=['😀','😂','😎','😡','🎉','👍'];
+const esc=t=>String(t).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const snap=()=>({pl:G.pl.map(p=>({name:p.name,av:p.av,ai:p.ai,pers:p.pers,id:p.id,col:p.col,money:p.money,pos:p.pos,jail:p.jail,gojf:p.gojf,out:p.out})),t:G.t,owner:G.owner,houses:G.houses,mort:G.mort,pot:G.pot,rules:G.rules,order:G.order.map(p=>p.id)});
+const NET={role:null,room:'',name:'Player',peers:[],dc:null,pc:null,me:null,redraw:null,pend:null,
+ cfg(){const i=[...NET_CONFIG.iceServers];if(NET_CONFIG.turn&&NET_CONFIG.turn.urls)i.push(NET_CONFIG.turn);return{iceServers:i}},
+ enc:o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))),
+ dec:t=>JSON.parse(decodeURIComponent(escape(atob(t.trim())))),
+ gather:pc=>new Promise(r=>{if(pc.iceGatheringState=='complete')return r();const t=setTimeout(r,6000);pc.onicegatheringstatechange=()=>{if(pc.iceGatheringState=='complete'){clearTimeout(t);r()}}}),
+ live(){return this.peers.filter(p=>p.name&&p.dc.readyState=='open')},
+ to(p,m){if(p.dc&&p.dc.readyState=='open')p.dc.send(JSON.stringify(m))},
+ bc(m){if(this.role=='host')this.live().forEach(p=>this.to(p,m))},
+ send(m){if(this.dc&&this.dc.readyState=='open')this.dc.send(JSON.stringify(m))},
+ close(){try{this.pr&&this.pr.destroy()}catch(e){}this.pr=null;try{this.pc&&this.pc.close()}catch(e){}this.peers.forEach(p=>{try{p.pc.close()}catch(e){}});this.peers=[];this.role=null;this.dc=null;this.pc=null;this.redraw=null},
+popt(){return Object.assign({config:this.cfg()},NET_CONFIG.peerServer||{})},
+ host(){const ch='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';this.close();this.role='host';this.peers=[];this.room=Array.from({length:5},()=>ch[Math.random()*ch.length|0]).join('');
+  const pr=this.pr=new Peer('kapitalkings-'+this.room,this.popt());
+  pr.on('open',()=>{go('lobby');this.lobby()});
+  pr.on('connection',c=>this.accept(c));
+  pr.on('error',e=>{if(this.role!='host')return;if(e.type=='unavailable-id'){this.host();return}alert('Could not create the room ('+e.type+'). Check your internet connection.');this.close();go('menu')})},
+ lobby(){const names=[this.name+' 👑',...this.live().map(p=>p.name)];$('#lroom').textContent=this.room;$('#lpl').innerHTML=names.map((n,i)=>`<div class="row"><span>${AV[i]} ${esc(n)}</span><span>🟢 connected</span></div>`).join('');$('#lhost').style.display='block';this.bc({t:'lobby',names,room:this.room})},
+ accept(c){const full=G&&!G.over?'This game has already started.':this.peers.length>=9?'Room is full (10 players max).':null;
+  if(full){c.on('open',()=>{c.send(JSON.stringify({t:'full',why:full}));setTimeout(()=>c.close(),500)});return}
+  const peer={pc:c,dc:{send:x=>c.send(x),get readyState(){return c.open?'open':'closed'}},name:null};this.peers.push(peer);
+  c.on('data',d=>{try{this.hostMsg(peer,JSON.parse(d))}catch(e){}});c.on('close',()=>this.drop(peer));c.on('error',()=>this.drop(peer));
+  peer.t=setTimeout(()=>{if(!peer.name)this.drop(peer)},20000)},
+ drop(p){clearTimeout(p.t);if(!this.peers.includes(p))return;this.peers=this.peers.filter(x=>x!==p);try{p.pc.close()}catch(e){}if(this.role!='host')return;
+  if(G&&!G.over&&p.pid!=null){const q=G.pl[p.pid];if(q&&q.net){q.net=null;q.ai=true;q.D=DIFF.Normal;q.pers='Auto';q.mod=0;log(`📡 ${q.name} disconnected — AI takes over`);if(p.resolve)p.resolve(0);if(p.mres)p.mres()}}else if(!G||G.over)this.lobby()},
+ hostMsg(p,m){const q=G&&p.pid!=null?G.pl[p.pid]:null;
+  if(m.t=='hello'&&!p.name){p.name=String(m.name||'Guest').replace(/[<>&"']/g,'').slice(0,14)||'Guest';clearTimeout(p.t);this.to(p,{t:'welcome'});this.lobby()}
+  else if(m.t=='ans'&&p.resolve)p.resolve(m.i);
+  else if(m.t=='mclose'&&p.mres)p.mres();
+  else if(m.t=='act'&&q&&p.mres&&Number.isInteger(m.i)&&m.i>=0&&m.i<40&&G.owner[m.i]==q.id){const f={b:canB,s:canS,m:canM,u:canU}[m.a];if(f&&f(m.i,q))ACT[m.a](m.i,q)}
+  else if(m.t=='chat'&&q&&EMO.includes(m.e))log(`${q.av} ${q.name}: ${m.e}`)},
+ join(code){code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(code.length<4){alert('Enter the room code first.');return}
+  this.close();this.role='client';this.room=code;show(`<h2>Joining room ${code}…</h2><p>Connecting…</p>`);
+  const fail=m=>{if(this.role!='client')return;alert(m);this.close();hide();go('menu')};
+  const to=setTimeout(()=>fail('Could not reach the room. Check the code and your connection.'),15000);
+  const pr=this.pr=new Peer(this.popt());
+  pr.on('error',e=>{clearTimeout(to);fail(e.type=='peer-unavailable'?'Room not found. Check the code.':'Connection error ('+e.type+').')});
+  pr.on('open',()=>{const c=this.pc=pr.connect('kapitalkings-'+code,{reliable:true});this.dc={send:x=>c.send(x),get readyState(){return c.open?'open':'closed'}};
+   c.on('open',()=>{clearTimeout(to);this.send({t:'hello',name:this.name});hide();go('lobby');$('#lhost').style.display='none'});
+   c.on('data',d=>{try{this.clientMsg(JSON.parse(d))}catch(e){}});
+   c.on('close',()=>{if(this.role=='client'){alert('Disconnected from the host.');this.close();hide();go('menu')}})})},
+ clientMsg(m){switch(m.t){
+  case 'full':alert(m.why||'Room is full.');this.close();go('menu');break;
+  case 'you':this.me=m.id;break;
+  case 'lobby':$('#lroom').textContent=m.room;$('#lpl').innerHTML=m.names.map((n,i)=>`<div class="row"><span>${AV[i]} ${esc(n)}</span><span>🟢 connected</span></div>`).join('');break;
+  case 'start':G=null;$('#log').innerHTML='';$('#mode').textContent=m.label;$('#emo').style.display='flex';buildBoard();go('game');break;
+  case 'st':G=G||{over:false};Object.assign(G,m.s);G.order=m.s.order.map(i=>G.pl[i]);for(let i=0;i<40;i++)uc(i);tokens();dash();if(this.redraw)this.redraw();break;
+  case 'log':log(m.h);break;case 'say':say(m.x);break;case 'sfx':A.sfx(m.n);break;
+  case 'dice':{const F='⚀⚁⚂⚃⚄⚅';$$('.die').forEach((d,i)=>d.textContent=F[m.r[i]-1]);break}
+  case 'card':{const cd=$('#card');if(!m.c){cd.style.display='none';break}cd.firstChild.style.background=m.k=='cc'?'#ffd36b':'#ff9a76';cd.firstChild.textContent=(m.k=='cc'?'📦 ':'❓ ')+m.c;cd.style.display='block';break}
+  case 'ask':ask(m.m,m.o).then(i=>this.send({t:'ans',i}));break;
+  case 'manage':manage(G.pl[this.me]);break;
+  case 'over':over(G.pl[m.w]);break}}};
+const nm=()=>($('#nn').value||'Player').replace(/[<>&"']/g,'').slice(0,14)||'Player';
+function cp(id){const t=$('#'+id);t.select();try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand('copy')}}
+function chat(e){if(NET.role=='host')log(`${G.pl[0].av} ${G.pl[0].name}: ${e}`);else NET.send({t:'chat',e})}
+$('#emo').innerHTML=EMO.map(e=>`<button class="alt" onclick="chat('${e}')">${e}</button>`).join('');
+function leaveLobby(){NET.close();go('menu')}
+function shareRoom(){const u=location.href.split(/[?#]/)[0]+'?room='+NET.room;try{navigator.clipboard.writeText(u)}catch(e){}alert('Room code: '+NET.room+'\nInvite link (copied): '+u)}
+function netMenu(pre){A.sfx('click');if(!window.Peer){show('<h2>Not available</h2><p>The connection library could not load. Online play needs an internet connection.</p><button onclick="hide()">Close</button>');return}
+ const inp='style="width:100%;padding:9px;border-radius:8px;border:0;background:#0b1320;color:#fff;text-transform:uppercase"';
+ show(`<h2>🌐 Online Multiplayer</h2><label>Your name</label><input type="text" id="nn" value="Player" maxlength="14" ${inp}><p><button onclick="NET.name=nm();hide();NET.host()">➕ Create room</button></p><label>Or join with a room code</label><input type="text" id="rcode" value="${pre||''}" maxlength="8" placeholder="e.g. K7M2P" ${inp}><p><button onclick="NET.name=nm();NET.join($('#rcode').value)">Join room</button> <button class="alt" onclick="hide()">Close</button></p><p style="font-size:12px;opacity:.75">Room codes are matched through the free public PeerJS broker; game data then flows directly between browsers (WebRTC). 2–10 players. If someone drops, an AI takes their seat. Optional TURN relay: <code>NET_CONFIG.turn</code>.</p>`)}
+function startOnline(){const peers=NET.live();if(!peers.length){alert('Invite at least one player first.');return}A.init();
+ const pl=[{name:NET.name,av:AV[0],ai:false},...peers.map((q,i)=>({name:q.name,av:AV[i+1],ai:false,net:q}))];
+ const n=Math.min(+$('#lai').value||0,10-pl.length);for(let i=0;i<n;i++){const pr=PERS[Math.random()*5|0];pl.push({name:AIN[i],av:AV[pl.length],ai:true,D:DIFF.Normal,pers:pr[0],mod:pr[1]})}
+ initGame(pl,1500,false,`Online · Room ${NET.room}`)}
+{const q=new URLSearchParams(location.search).get('room');if(q)setTimeout(()=>netMenu(q.toUpperCase().replace(/[^A-Z0-9]/g,'')),300)}
 window.addEventListener('error',e=>console.error('Game error:',e.message));
 </script></body></html>
