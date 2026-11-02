@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Kapital Kings</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at 30% 20%,#1d3557,#0b1320);color:#fff;min-height:100vh;overflow-x:hidden}
+button,select,input{font:inherit}
+button{background:linear-gradient(#f9d65c,#d9a21b);color:#2a1d00;border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;min-height:40px;box-shadow:0 3px 0 #8a6410;transition:transform .1s}
+button:hover{transform:translateY(-1px)}button:active{transform:translateY(2px);box-shadow:none}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.alt{background:#2c3e5c;color:#fff;box-shadow:0 3px 0 #16233b}
+.scr{display:none}.scr.on{display:flex}
+.center{min-height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:16px;text-align:center}
+.logo{font-size:clamp(34px,8vw,68px);font-weight:900;background:linear-gradient(90deg,#f9d65c,#ff7b54,#f9d65c);-webkit-background-clip:text;background-clip:text;color:transparent;animation:glow 3s infinite alternate}
+@keyframes glow{to{filter:drop-shadow(0 0 14px #f9d65c)}}
+.menu button{display:block;width:min(320px,86vw);margin:8px auto;font-size:18px}
+.panel{background:#16233bcc;border:1px solid #ffffff22;border-radius:16px;padding:16px;width:min(460px,94vw);text-align:left}
+.panel label{display:block;margin:10px 0 4px;font-size:14px;opacity:.85}
+.panel input[type=text],.panel select{width:100%;padding:9px;border-radius:8px;border:0;background:#0b1320;color:#fff}
+#avs button{padding:4px 8px;margin:2px;font-size:20px;min-height:36px}#avs button.sel{outline:3px solid #fff}
+#game{flex-direction:column;min-height:100vh}
+header{display:flex;gap:8px;align-items:center;padding:8px 12px;background:#0b1320cc;flex-wrap:wrap}
+header b{font-size:18px}header .sp{flex:1}header button{padding:6px 10px;min-height:36px}
+.main{display:flex;gap:10px;padding:8px;flex:1;min-height:0}
+.bw{flex:1;display:grid;place-items:start center;min-width:0}
+.board{container-type:inline-size;width:min(100%,calc(100vh - 70px));aspect-ratio:1;display:grid;grid-template:1.5fr repeat(9,1fr) 1.5fr/1.5fr repeat(9,1fr) 1.5fr;background:#cfe8d3;border:5px solid #3b2a14;border-radius:14px;box-shadow:0 20px 50px #000a;position:relative}
+.c{border:1px solid #2b4a35;background:linear-gradient(#f3fbf4,#d6ecd9);color:#12261a;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;font-size:max(6px,1.1cqw);line-height:1.1;padding:1px;position:relative;overflow:hidden;min-width:0}
+.c .bar{height:24%;width:100%;font-size:max(6px,1.2cqw);display:flex;align-items:center;justify-content:center}
+.c .nm{font-weight:700;flex:1;display:flex;align-items:center}.c .pr{font-size:.9em}
+.c.corner{font-size:max(7px,1.4cqw);background:linear-gradient(#fff4c9,#f2d77a)}
+.tk{position:absolute;inset:auto 0 0 0;display:flex;flex-wrap:wrap;justify-content:center;gap:1px}
+.tkn{width:max(11px,2.4cqw);height:max(11px,2.4cqw);border-radius:50%;border:2px solid #fff;font-size:max(7px,1.4cqw);display:grid;place-items:center;box-shadow:0 2px 4px #0008;animation:pop .3s}
+@keyframes pop{from{transform:scale(2)}}
+.mid{grid-area:2/2/11/11;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2cqw;background:radial-gradient(#1f6f4a,#0f3f2a);color:#fff;text-align:center;padding:2cqw}
+.mid .t{font-size:5cqw;font-weight:900;color:#f9d65c;letter-spacing:.3cqw}
+#dice{display:flex;gap:2cqw}.die{font-size:10cqw;line-height:1;background:#fff;color:#111;border-radius:1.5cqw;padding:0 .8cqw;box-shadow:0 .6cqw 1.2cqw #0008}.die.sh{animation:sh .12s infinite}
+@keyframes sh{50%{transform:rotate(14deg) translateY(-4px)}}
+#msg{font-size:max(11px,2cqw);min-height:2.6em;max-width:90%}
+#card{position:absolute;left:50%;top:50%;width:34cqw;height:22cqw;margin:-11cqw 0 0 -17cqw;perspective:800px;display:none;z-index:5}
+#card div{width:100%;height:100%;border-radius:1.5cqw;padding:2cqw;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:2.2cqw;color:#111;text-align:center;animation:flip .7s;box-shadow:0 1cqw 3cqw #000a;border:.5cqw solid #fff}
+@keyframes flip{from{transform:rotateY(180deg) scale(.5)}}
+.side{width:330px;display:flex;flex-direction:column;gap:8px}
+#act{display:flex;flex-wrap:wrap;gap:6px}#act button{flex:1;min-width:110px;min-height:46px}
+#players{display:flex;flex-direction:column;gap:5px}
+.pc{background:#16233bdd;border-left:6px solid;border-radius:10px;padding:6px 8px;display:grid;grid-template-columns:auto 1fr auto;gap:0 8px;align-items:center;font-size:14px}
+.pc.act{background:#2f4a78;box-shadow:0 0 0 2px #f9d65c}.pc.out{opacity:.35;text-decoration:line-through}
+.pc .av{font-size:24px;grid-row:span 2}.pc small{grid-column:2/4;opacity:.8;font-size:11px}.pc i{opacity:.6;font-size:11px;margin-left:4px}.cash{color:#7dff9a;font-weight:700}
+#log{background:#0b1320cc;border-radius:10px;padding:8px;height:170px;overflow:auto;font-size:12px}#log div{padding:2px 0;border-bottom:1px solid #fff1}
+#modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:50;padding:12px}
+#modal .box{background:#16233b;border:1px solid #fff3;border-radius:16px;padding:18px;max-width:560px;width:100%;max-height:88vh;overflow:auto;animation:pop .25s}
+#modal h2{margin-top:0;color:#f9d65c}.row{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #fff2;flex-wrap:wrap;font-size:13px}.row button{padding:4px 8px;min-height:30px;font-size:12px;margin-left:3px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px}
+#modal li{margin:6px 0}#modal code{background:#0b1320;padding:2px 5px;border-radius:4px;font-size:12px}
+.cf{position:fixed;top:-30px;font-size:24px;animation:fall 3.5s linear forwards;z-index:60}@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+@media(max-width:900px){.main{flex-direction:column}.side{width:100%}.board{width:100%}#players{flex-direction:row;overflow-x:auto}.pc{min-width:170px}}
+</style></head><body>
+
+<section id="menu" class="scr on center">
+ <div class="logo">🎩 KAPITAL KINGS</div>
+ <div class="menu">
+  <button onclick="A.sfx('click');go('setup')">🤖 Human vs AI</button>
+  <button class="alt" onclick="onlineInfo()">🌐 Online Multiplayer</button>
+  <button class="alt" onclick="howTo()">📖 Instructions</button>
+  <button class="alt" onclick="settings()">⚙️ Settings</button>
+ </div>
+</section>
+
+<section id="setup" class="scr center">
+ <div class="panel"><h2 style="margin-top:0">Game Setup</h2>
+  <label>Your name</label><input type="text" id="pn" value="Player" maxlength="14">
+  <label>Avatar</label><div id="avs"></div>
+  <label>AI opponents: <b id="nv">3</b></label><input type="range" id="nai" min="1" max="9" value="3" style="width:100%" oninput="nv.textContent=this.value">
+  <label>AI difficulty</label><select id="df"><option>Easy</option><option selected>Normal</option><option>Hard</option><option>Expert</option></select>
+  <label>Starting money</label><select id="sm"><option>1000</option><option selected>1500</option><option>2500</option></select>
+  <label><input type="checkbox" id="pot"> House rule: taxes go to a Free Parking jackpot</label><br>
+  <button onclick="startGame()">Start Game</button> <button class="alt" onclick="go('menu')">Back</button>
+ </div>
+</section>
+
+<section id="game" class="scr">
+ <header><b>🎩 Kapital Kings</b><span id="mode">Human vs AI</span><span class="sp"></span><span id="turn"></span>
+  <button class="alt" id="snd" onclick="A.toggle()">🔊</button><button class="alt" onclick="fs()">⛶</button><button class="alt" onclick="howTo()">❓</button><button class="alt" onclick="settings()">⚙️</button><button class="alt" onclick="exitGame()">✖</button></header>
+ <div class="main">
+  <div class="bw"><div class="board" id="board"><div class="mid"><div class="t">KAPITAL KINGS</div><div id="dice"><span class="die">⚀</span><span class="die">⚀</span></div><div id="msg"></div></div><div id="card"><div></div></div></div></div>
+  <div class="side"><div id="act"></div><div id="players"></div><div id="log"></div></div>
+ </div>
+</section>
+
+<section id="over" class="scr center"><div class="logo">🏆 Game Over</div><div class="panel" id="rank"></div>
+ <div><button onclick="go('setup')">Play Again</button> <button class="alt" onclick="go('menu')">Main Menu</button></div></section>
+
+<div id="modal"></div>
+
+<script>
+'use strict';
+/* ============ ONLINE CONFIG (see Online Multiplayer dialog) ============ */
+const NET_CONFIG={signalingUrl:'',iceServers:[{urls:'stun:stun.l.google.com:19302'}],turn:{urls:'',username:'',credential:''}};
+
+/* ============ BOARD DATA ============ */
+const GC={br:'#8b5a3c',lb:'#9ad7f5',pk:'#e25fa7',or:'#f39c34',rd:'#e03c3c',ye:'#f6e04a',gr:'#2ea25a',bl:'#2b52c9'};
+const S=[['GO','go'],['Mediterranean','p',60,'br'],['Community Chest','cc'],['Baltic','p',60,'br'],['Income Tax','tax',200],['Reading Rail','rr',200],['Oriental','p',100,'lb'],['Chance','ch'],['Vermont','p',100,'lb'],['Connecticut','p',120,'lb'],
+['Jail / Visiting','jail'],['St. Charles','p',140,'pk'],['Electric Co.','u',150],['States','p',140,'pk'],['Virginia','p',160,'pk'],['Penn Rail','rr',200],['St. James','p',180,'or'],['Community Chest','cc'],['Tennessee','p',180,'or'],['New York','p',200,'or'],
+['Free Parking','fp'],['Kentucky','p',220,'rd'],['Chance','ch'],['Indiana','p',220,'rd'],['Illinois','p',240,'rd'],['B&O Rail','rr',200],['Atlantic','p',260,'ye'],['Ventnor','p',260,'ye'],['Water Works','u',150],['Marvin','p',280,'ye'],
+['Go To Jail','gj'],['Pacific','p',300,'gr'],['N. Carolina','p',300,'gr'],['Community Chest','cc'],['Pennsylvania','p',320,'gr'],['Short Line','rr',200],['Chance','ch'],['Park Place','p',350,'bl'],['Luxury Tax','tax',100],['Boardwalk','p',400,'bl']];
+const IC={go:'➡️ ',cc:'📦',ch:'❓',tax:'💰',rr:'🚂',u:'💡',jail:'🔒',fp:'🅿️',gj:'👮'};
+const GO_ORDER=['br','lb','pk','or','rd','ye','gr','bl'];
+const CH=[['Advance to GO','a',0],['Advance to Illinois','a',24],['Advance to Boardwalk','a',39],['Take a trip to Reading Rail','a',5],['Advance to St. Charles','a',11],['Bank pays you a dividend of $50','m',50],['Get Out of Jail Free!','f'],['Go back 3 spaces','b'],['Go directly to Jail','j'],['Pay poor tax of $15','m',-15],['Building loan matures: collect $150','m',150],['You are elected chairman: pay each player $50','e',-50],['Property repairs: $25/house, $100/hotel','r',25,100],['Crossword winner! Collect $100','m',100],['Advance to nearest railway','n'],['Speeding fine: pay $60','m',-60]];
+const CC=[['Advance to GO','a',0],['Bank error in your favor: collect $200','m',200],['Doctor fees: pay $50','m',-50],['Stock sale: collect $50','m',50],['Get Out of Jail Free!','f'],['Go directly to Jail','j'],['Holiday fund: collect $100','m',100],['Tax refund: collect $20','m',20],['Birthday! Collect $10 from every player','e',10],['Life insurance matures: $100','m',100],['Hospital fees: pay $100','m',-100],['School fees: pay $50','m',-50],['Consultancy fee: collect $25','m',25],['Street repairs: $40/house, $115/hotel','r',40,115],['Beauty contest: collect $10','m',10],['Inheritance: collect $100','m',100]];
+const AV=['🦁','🐯','🦊','🐼','🐸','🐙','🦄','🐧','🤖','👽'];
+const COL=['#e63946','#2a9d8f','#f4a261','#6a4c93','#3a86ff','#ff006e','#80b918','#ffbe0b','#8d99ae','#00b4d8'];
+const AIN=['Ada','Bolt','Cleo','Dex','Echo','Fizz','Gus','Hana','Ivy'];
+const PERS=[['Cautious',100],['Aggressive',-50],['Balanced',0],['Risk-taker',-80],['Collector',-20]];
+const DIFF={Easy:{buy:.55,res:250,build:0},Normal:{buy:.85,res:200,build:.6},Hard:{buy:.95,res:120,build:.9},Expert:{buy:1,res:80,build:1}};
+
+/* ============ HELPERS ============ */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let G=null;
+const sleep=async ms=>{const g=G;await new Promise(r=>setTimeout(r,ms));if(G!==g||G.over)throw 'stop'};
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const go=id=>{$$('.scr').forEach(s=>s.classList.toggle('on',s.id==id));A.mode=id=='game'?'game':'menu'};
+const show=h=>{const m=$('#modal');m.innerHTML='<div class="box">'+h+'</div>';m.style.display='flex'};
+const hide=()=>{$('#modal').style.display='none';$('#modal').onclick=null};
+const log=t=>{const l=$('#log');l.insertAdjacentHTML('afterbegin','<div>'+t+'</div>');while(l.children.length>60)l.lastChild.remove()};
+const say=t=>$('#msg').textContent=t;
+const fs=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
+
+/* ============ AUDIO ENGINE (Web Audio, all synthesized) ============ */
+const A={ctx:null,on:true,mv:.5,sv:.7,mode:'menu',
+ init(){if(!this.ctx){try{this.ctx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+   this.mg=this.ctx.createGain();this.sg=this.ctx.createGain();this.mg.connect(this.ctx.destination);this.sg.connect(this.ctx.destination);this.vol();this.music()}
+  if(this.ctx.state=='suspended')this.ctx.resume()},
+ vol(){if(!this.ctx)return;const t=this.ctx.currentTime;this.mg.gain.setTargetAtTime(this.on?this.mv*.25:0,t,.3);this.sg.gain.setTargetAtTime(this.on?this.sv:0,t,.05);$('#snd').textContent=this.on?'🔊':'🔇'},
+ toggle(){this.on=!this.on;this.save();this.init();this.vol()},
+ save(){try{localStorage.setItem('kapital-kings',JSON.stringify({mv:this.mv,sv:this.sv,on:this.on}))}catch(e){}},
+ load(){try{Object.assign(this,JSON.parse(localStorage.getItem('kapital-kings'))||{})}catch(e){}},
+ tone(f,d,type,v,dest,when=0){const c=this.ctx,o=c.createOscillator(),g=c.createGain(),t=c.currentTime+when;o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(dest);o.start(t);o.stop(t+d+.05)},
+ sfx(n){if(!this.ctx||!this.on)return;const q={click:[[700,0]],dice:[[200,0],[300,.06],[240,.12],[360,.18],[280,.24]],move:[[440,0]],buy:[[523,0],[659,.1],[784,.2]],cash:[[880,0],[1175,.08]],card:[[500,0],[750,.1]],build:[[300,0],[400,.1],[500,.2]],trade:[[600,0],[450,.1]],win:[[523,0],[659,.15],[784,.3],[1047,.45]],bad:[[300,0],[220,.15],[150,.3]],note:[[900,0]]}[n]||[];q.forEach(([f,w])=>this.tone(f,.15,n=='bad'?'sawtooth':'triangle',.25,this.sg,w))},
+ music(){const P=[[262,330,392,523],[220,277,330,440],[175,220,262,349],[196,247,294,392]];let s=0;
+  setInterval(()=>{if(!this.on||!this.ctx)return;const g=this.mode=='game',p=P[(s>>3)&3];
+   if(g||s%2==0)this.tone(p[s%4]*(g?1:.5),.5,g?'triangle':'sine',.5,this.mg);if(g&&s%4==0)this.tone(p[0]/2,.9,'sine',.6,this.mg);s++},300)}
+};
+A.load();document.addEventListener('pointerdown',()=>A.init());
+
+/* ============ GAME ENGINE ============ */
+const cur=()=>G.pl[G.t];
+const props=p=>S.map((s,i)=>i).filter(i=>G.owner[i]==p.id);
+const grp=i=>S[i][1]=='p'?S.map((s,j)=>j).filter(j=>S[j][3]==S[i][3]):[i];
+const full=(o,i)=>grp(i).every(j=>G.owner[j]==o);
+const HC=i=>[50,100,150,200][GO_ORDER.indexOf(S[i][3])>>1];
+const hs=p=>props(p).reduce((a,i)=>a+G.houses[i],0);
+const worth=p=>p.money+props(p).reduce((a,i)=>a+(G.mort[i]?0:S[i][2])+G.houses[i]*(S[i][1]=='p'?HC(i):0),0);
+function rent(i,roll){const s=S[i],o=G.owner[i];
+ if(s[1]=='rr')return 25<<(S.filter((x,j)=>x[1]=='rr'&&G.owner[j]==o).length-1);
+ if(s[1]=='u')return roll*(S.filter((x,j)=>x[1]=='u'&&G.owner[j]==o).length==2?10:4);
+ const h=G.houses[i],b=Math.max(2,Math.round(s[2]/30));let r=b*[1,5,15,45,80,125][h];if(!h&&full(o,i))r*=2;return r}
+const canB=(i,p)=>{if(S[i][1]!='p'||G.owner[i]!=p.id||!full(p.id,i))return false;const g=grp(i);return g.every(j=>!G.mort[j])&&G.houses[i]<5&&G.houses[i]<=Math.min(...g.map(j=>G.houses[j]))&&p.money>=HC(i)};
+const canS=(i,p)=>S[i][1]=='p'&&G.houses[i]>0&&G.houses[i]>=Math.max(...grp(i).map(j=>G.houses[j]));
+const canM=(i,p)=>!G.mort[i]&&grp(i).every(j=>!G.houses[j]);
+const canU=(i,p)=>G.mort[i]&&p.money>=Math.ceil(S[i][2]*.55);
+const ACT={
+ b(i,p){p.money-=HC(i);G.houses[i]++;A.sfx('build');log(`🏗 ${p.name} built on ${S[i][0]}`);uc(i);dash()},
+ s(i,p){p.money+=HC(i)/2;G.houses[i]--;A.sfx('cash');log(`${p.name} sold a house on ${S[i][0]}`);uc(i);dash()},
+ m(i,p){G.mort[i]=1;p.money+=S[i][2]/2;A.sfx('cash');log(`${p.name} mortgaged ${S[i][0]}`);uc(i);dash()},
+ u(i,p){G.mort[i]=0;p.money-=Math.ceil(S[i][2]*.55);A.sfx('trade');log(`${p.name} unmortgaged ${S[i][0]}`);uc(i);dash()}};
+
+/* ---- Board rendering ---- */
+function buildBoard(){const b=$('#board');$$('.c').forEach(e=>e.remove());
+ S.forEach((s,i)=>{let r,c;if(i<=10){r=11;c=11-i}else if(i<20){c=1;r=21-i}else if(i<=30){r=1;c=i-19}else{c=11;r=i-29}
+  const d=document.createElement('div');d.className='c'+(i%10==0?' corner':'');d.id='c'+i;d.style.gridArea=`${r}/${c}`;
+  d.innerHTML=`<div class="bar" style="background:${GC[s[3]]||'transparent'}"></div><div class="nm">${IC[s[1]]||''}${s[0]}</div><div class="pr">${s[2]?'$'+s[2]:''}</div><div class="tk"></div>`;b.appendChild(d)})}
+function uc(i){const d=$('#c'+i),h=G.houses[i],o=G.owner[i];d.style.boxShadow=o>=0?`inset 0 0 0 3px ${G.pl[o].col}`:'';d.style.opacity=G.mort[i]?.45:1;
+ if(S[i][1]=='p')d.querySelector('.bar').textContent=h==5?'🏨':'🏠'.repeat(h)}
+function tokens(){$$('.tk').forEach(e=>e.innerHTML='');G.pl.forEach(p=>{if(!p.out)$('#c'+p.pos+' .tk').insertAdjacentHTML('beforeend',`<span class="tkn" style="background:${p.col}">${p.av}</span>`)})}
+function dash(){$('#players').innerHTML=G.pl.map((p,i)=>`<div class="pc ${i==G.t?'act':''} ${p.out?'out':''}" style="border-color:${p.col}"><span class="av">${p.av}</span><span><b>${p.name}</b>${p.ai?`<i>${p.pers}</i>`:''}</span><span class="cash">$${p.money}</span><small>🏘 ${props(p).length} · 🏠 ${hs(p)} · 📍 ${S[p.pos][0]}${p.jail?' 🔒 Jail':''}${p.gojf?' 🎟':''}</small></div>`).join('');
+ $('#turn').textContent=`${cur().av} ${cur().name}'s turn`+(G.rules.pot?` · Jackpot $${G.pot}`:'')}
+const ask=(m,o)=>{say(m);return new Promise(res=>{const a=$('#act');a.innerHTML='';o.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{A.sfx('click');a.innerHTML='';res(i)};a.appendChild(b)})})};
+
+/* ---- Money & bankruptcy ---- */
+function raise(p,a){while(p.money<a){let i=props(p).filter(j=>G.houses[j]>0).sort((x,y)=>G.houses[y]-G.houses[x])[0];if(i!=null){ACT.s(i,p);continue}i=props(p).find(j=>!G.mort[j]);if(i==null)return;ACT.m(i,p)}}
+function pay(p,a,to){if(p.money<a)raise(p,a);if(p.money<a){bankrupt(p,to);return false}p.money-=a;if(to)to.money+=a;dash();return true}
+function bankrupt(p,to){p.out=true;G.order.push(p);A.sfx('bad');log(`💥 ${p.name} went bankrupt${to?' to '+to.name:''}!`);
+ props(p).forEach(i=>{G.owner[i]=to?to.id:-1;G.houses[i]=0;if(!to)G.mort[i]=0;uc(i)});if(to){to.money+=p.money;to.gojf+=p.gojf}p.money=0;p.gojf=0;tokens();dash();
+ const alive=G.pl.filter(x=>!x.out);if(alive.length==1){G.over=true;setTimeout(()=>over(alive[0]),600)}}
+
+/* ---- Movement ---- */
+async function place(p,pos){p.pos=pos;tokens();dash();await sleep(250)}
+async function move(p,n){for(let k=0;k<n;k++){p.pos=(p.pos+1)%40;if(p.pos==0){p.money+=200;A.sfx('cash');log(`${p.name} passed GO (+$200)`)}tokens();A.sfx('move');await sleep(170)}dash()}
+function goJail(p){p.pos=10;p.jail=1;p.jt=0;A.sfx('bad');log(`🔒 ${p.name} goes to jail`);tokens();dash()}
+
+/* ---- Landing ---- */
+function aiBuy(p,i){const D=p.D,s=S[i];if(p.money<s[2])return false;const comp=s[1]=='p'&&grp(i).filter(j=>G.owner[j]!=p.id&&j!=i).length==0;
+ return comp||(Math.random()<D.buy&&p.money-s[2]>=D.res+p.mod)}
+async function land(p,r){const s=S[p.pos],t=s[1],i=p.pos;
+ if(t=='p'||t=='rr'||t=='u'){const o=G.owner[i];
+  if(o<0){let buy;if(p.ai){say(`🤔 ${p.name} is thinking…`);await sleep(900);buy=aiBuy(p,i)}
+   else if(p.money>=s[2])buy=(await ask(`Buy ${s[0]} for $${s[2]}?`,['💵 Buy','Pass']))==0;else{log('You cannot afford '+s[0]);buy=false}
+   if(buy){p.money-=s[2];G.owner[i]=p.id;A.sfx('buy');log(`🏠 ${p.name} bought ${s[0]} ($${s[2]})`);uc(i);if(s[1]=='p'&&full(p.id,i))log(`🌈 ${p.name} completed a color group!`)}else log(`${p.name} passed on ${s[0]}`)}
+  else if(o!=p.id&&!G.mort[i]){const a=rent(i,r);log(`💸 ${p.name} pays $${a} rent to ${G.pl[o].name}`);A.sfx('cash');pay(p,a,G.pl[o])}}
+ else if(t=='tax'){log(`${p.name} pays $${s[2]} tax`);if(pay(p,s[2],null)&&G.rules.pot)G.pot+=s[2]}
+ else if(t=='cc'||t=='ch')await draw(p,t);
+ else if(t=='gj')goJail(p);
+ else if(t=='fp'&&G.rules.pot&&G.pot){log(`🎉 ${p.name} wins the jackpot $${G.pot}!`);p.money+=G.pot;G.pot=0;A.sfx('cash')}
+ dash();await sleep(300)}
+
+async function draw(p,t){const deck=t=='cc'?CC:CH,d=G.dk[t],c=deck[d.o[d.n++%16]];
+ const cd=$('#card');cd.firstChild.style.background=t=='cc'?'#ffd36b':'#ff9a76';cd.firstChild.textContent=(t=='cc'?'📦 ':'❓ ')+c[0];cd.style.display='block';cd.firstChild.style.animation='none';cd.firstChild.offsetWidth;cd.firstChild.style.animation='';
+ A.sfx('card');log(`🃏 ${p.name}: ${c[0]}`);await sleep(2000);cd.style.display='none';
+ switch(c[1]){
+  case 'm':if(c[2]>0){p.money+=c[2];A.sfx('cash')}else pay(p,-c[2],null);break;
+  case 'a':if(c[2]<p.pos){p.money+=200;log('Passed GO (+$200)')}await place(p,c[2]);await land(p,0);break;
+  case 'n':{let n=[5,15,25,35].find(x=>x>p.pos);if(n==null){n=5;p.money+=200}await place(p,n);await land(p,0);break}
+  case 'b':await place(p,(p.pos+37)%40);await land(p,0);break;
+  case 'j':goJail(p);break;
+  case 'f':p.gojf++;break;
+  case 'e':G.pl.filter(q=>!q.out&&q!=p).forEach(q=>{if(p.out)return;c[2]>0?pay(q,c[2],p):pay(p,-c[2],q)});break;
+  case 'r':{let tot=0;props(p).forEach(i=>{const h=G.houses[i];tot+=h==5?c[3]:h*c[2]});if(tot)pay(p,tot,null);break}}}
+
+/* ---- Dice ---- */
+async function rollDice(){A.sfx('dice');const ds=$$('.die'),F='⚀⚁⚂⚃⚄⚅';ds.forEach(d=>d.classList.add('sh'));
+ for(let k=0;k<10;k++){ds.forEach(d=>d.textContent=F[Math.random()*6|0]);await sleep(70)}
+ const r=[1+Math.random()*6|0,1+Math.random()*6|0];ds.forEach((d,i)=>{d.classList.remove('sh');d.textContent=F[r[i]-1]});return r}
+
+/* ---- Turn flow ---- */
+function manage(p){return new Promise(res=>{
+ const draw=()=>{const rows=props(p).map(i=>{const s=S[i],h=G.houses[i];return `<div class="row"><span><i class="sw" style="background:${GC[s[3]]||'#888'}"></i>${s[0]} ${h==5?'🏨':'🏠'.repeat(h)}${G.mort[i]?' (mortgaged)':''}</span><span>`+
+  (s[1]=='p'?`<button data-a="b" data-i="${i}" ${canB(i,p)?'':'disabled'}>Build $${HC(i)}</button><button data-a="s" data-i="${i}" ${canS(i,p)?'':'disabled'}>Sell</button>`:'')+
+  (G.mort[i]?`<button data-a="u" data-i="${i}" ${canU(i,p)?'':'disabled'}>Unmortgage $${Math.ceil(s[2]*.55)}</button>`:`<button data-a="m" data-i="${i}" ${canM(i,p)?'':'disabled'}>Mortgage +$${s[2]/2}</button>`)+'</span></div>'}).join('')||'<p>You own no properties yet.</p>';
+  show(`<h2>Manage Properties</h2><p>Cash: <b>$${p.money}</b>. Build evenly across a full color group.</p>${rows}<p><button data-a="x">Close</button></p>`)};
+ $('#modal').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a;if(a=='x'){hide();res();return}ACT[a](+b.dataset.i,p);draw()};draw()})}
+function leaveJail(p,card){if(card)p.gojf--;else if(!pay(p,50,null))return;p.jail=0;log(`🔓 ${p.name} leaves jail`);dash()}
+async function humanPre(p){for(;;){const o=['🎲 Roll','🏗 Manage'];if(p.jail){o.push('Pay $50');if(p.gojf)o.push('🎟 Use card')}
+  const c=await ask(p.jail?'You are in jail: roll doubles, pay $50, or use a card.':'Your turn — roll the dice!',o);
+  if(c==0)return;if(c==1){await manage(p);continue}if(o[c]=='Pay $50'){if(p.money>=50){leaveJail(p);return}say('Not enough cash');continue}leaveJail(p,1);return}}
+async function aiPre(p){say(`${p.name} (${p.pers}) is planning…`);await sleep(700);const D=p.D;
+ for(const i of props(p))if(G.mort[i]&&p.money>D.res+S[i][2]+150&&canU(i,p))ACT.u(i,p);
+ if(Math.random()<D.build)for(let n=0;n<8;n++){const c=props(p).filter(i=>canB(i,p)&&p.money-HC(i)>=D.res+p.mod).sort((a,b)=>G.houses[a]-G.houses[b])[0];if(c==null)break;ACT.b(c,p);await sleep(300)}
+ if(p.jail){if(p.gojf)leaveJail(p,1);else if(p.money>350)leaveJail(p)}}
+async function takeTurn(p){let dbl=0;
+ for(;;){dash();say(`${p.name}'s turn`);if(p.ai)await aiPre(p);else await humanPre(p);if(p.out)return;
+  const [a,b]=await rollDice(),d=a==b;log(`🎲 ${p.name} rolled ${a}+${b}${d?' (doubles!)':''}`);
+  if(p.jail){if(d){p.jail=0;log(`${p.name} rolled doubles and escapes!`)}else if(++p.jt>=3){log('Third failed attempt: pays $50');pay(p,50,null);p.jail=0}else{say('Still in jail.');await sleep(800);return}
+   if(p.out)return;await move(p,a+b);await land(p,a+b);return}
+  if(d&&++dbl==3){log('Three doubles in a row!');goJail(p);return}
+  await move(p,a+b);await land(p,a+b);
+  if(p.out||G.over||p.jail||!d)return;say('Doubles — roll again!');await sleep(600)}}
+async function loop(){try{while(!G.over){const p=cur();if(!p.out){await takeTurn(p);
+   if(!p.ai&&!p.out&&!G.over)for(;;){const c=await ask('Anything else before ending your turn?',['✅ End Turn','🏗 Manage']);if(c==0)break;await manage(p)}}
+  if(G.over)break;do{G.t=(G.t+1)%G.pl.length}while(G.pl[G.t].out);dash();await sleep(250)}}catch(e){if(e!=='stop')console.error(e)}}
+
+/* ============ UI / SCREENS ============ */
+let myAv=0;
+function avs(){$('#avs').innerHTML=AV.map((a,i)=>`<button class="alt ${i==myAv?'sel':''}" onclick="myAv=${i};avs()">${a}</button>`).join('')}avs();
+function startGame(){A.init();A.sfx('click');const n=+$('#nai').value,D=DIFF[$('#df').value],cash=+$('#sm').value;
+ const pl=[{name:($('#pn').value||'Player').slice(0,14),av:AV[myAv],ai:false}];
+ const avs2=shuffle(AV.filter((a,i)=>i!=myAv));for(let i=0;i<n;i++){const pr=PERS[Math.random()*5|0];pl.push({name:AIN[i],av:avs2[i],ai:true,D,pers:pr[0],mod:pr[1]})}
+ pl.forEach((p,i)=>Object.assign(p,{id:i,col:COL[i],money:cash,pos:0,jail:0,jt:0,gojf:0,out:false}));
+ G={pl,t:0,owner:Array(40).fill(-1),houses:Array(40).fill(0),mort:Array(40).fill(0),pot:0,over:false,order:[],rules:{pot:$('#pot').checked},dk:{cc:{o:shuffle([...Array(16).keys()]),n:0},ch:{o:shuffle([...Array(16).keys()]),n:0}}};
+ $('#mode').textContent=`Human vs AI · ${$('#df').value}`;$('#log').innerHTML='';buildBoard();go('game');tokens();dash();log('🎩 Game started — good luck!');loop()}
+function exitGame(){if(confirm('Exit the current game?')){if(G)G.over=true;hide();go('menu')}}
+function over(w){A.sfx('win');const rk=[w,...G.order.slice().reverse()];
+ $('#rank').innerHTML=`<h2 style="margin-top:0">${w.av} ${w.name} wins!</h2>`+rk.map((p,i)=>`<div class="row"><span>#${i+1} ${p.av} ${p.name}${p.ai?' (AI)':''}</span><span>${p.out?'Bankrupt':'Net worth $'+worth(p)} · ${props(p).length} props</span></div>`).join('');
+ go('over');for(let i=0;i<70;i++){const e=document.createElement('div');e.className='cf';e.textContent=['🎉','🪙','⭐','🎊'][i%4];e.style.left=Math.random()*100+'vw';e.style.animationDelay=Math.random()*1.5+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),5500)}}
+function settings(){show(`<h2>Settings</h2><label>Music volume <input type="range" min="0" max="100" value="${A.mv*100}" oninput="A.mv=this.value/100;A.save();A.vol()" style="width:100%"></label><label>Effects volume <input type="range" min="0" max="100" value="${A.sv*100}" oninput="A.sv=this.value/100;A.save();A.vol()" style="width:100%"></label><p><button onclick="A.toggle();settings()">Sound: ${A.on?'ON':'OFF'}</button> <button class="alt" onclick="hide()">Close</button></p>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
+function howTo(){show(`<h2>📖 How to Play</h2><ol>
+<li>🎯 <b>Goal:</b> be the last player with money.</li><li>▶️ <b>Start:</b> choose opponents in Human vs AI and press Start.</li><li>🎲 <b>Roll</b> two dice on your turn. Doubles = roll again; three doubles = jail.</li><li>🚶 Your token moves that many spaces. Passing <b>GO</b> pays $200.</li>
+<li>🏠 <b>Buy</b> an unowned property you land on, or pass (it stays unowned in this build).</li><li>💸 <b>Rent:</b> land on someone's property and you pay. Full color group = double; houses and hotels raise it a lot. Railways and utilities scale with how many are owned.</li>
+<li>🏗 <b>Build</b> via Manage once you own a whole color group. Build evenly; 4 houses, then a hotel.</li><li>🤝 <b>Trading</b> is not in this build.</li><li>🃏 <b>Chance / Community Chest</b> draw a card with a surprise.</li>
+<li>🔒 <b>Jail:</b> roll doubles, pay $50, or use a Get Out of Jail card. After 3 failed tries you pay $50.</li><li>🏦 <b>Mortgage</b> a property (no houses) for half its price; unmortgage for price + 10%.</li><li>💥 <b>Bankruptcy:</b> if you can't pay even after selling houses and mortgaging, you are out and your assets go to the creditor.</li>
+<li>🏆 <b>Win</b> when everyone else is bankrupt.</li><li>🌐 <b>Multiplayer:</b> needs a signaling server (see Online Multiplayer).</li></ol><button onclick="hide()">Got it!</button>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
+function onlineInfo(){show(`<h2>🌐 Online Multiplayer</h2><p><b>Not included in this build.</b> Real internet play over WebRTC DataChannels needs infrastructure a single HTML file cannot provide, so no fake lobby is shown.</p><ul><li><b>Signaling server</b> (WebSocket) to relay SDP offers/answers and ICE candidates per room ID. Set <code>NET_CONFIG.signalingUrl</code>.</li><li><b>STUN</b>: a public server is preconfigured in <code>NET_CONFIG.iceServers</code>.</li><li><b>TURN</b> (e.g. coturn) for strict NATs: fill <code>NET_CONFIG.turn</code> with url, username and credential.</li><li>Planned design: the host runs the game engine and validates every action; guests send intents only.</li></ul><button onclick="hide()">Close</button>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
+window.addEventListener('error',e=>console.error('Game error:',e.message));
+</script></body></html>
