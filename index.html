@@ -22,59 +22,537 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Kapital Kings</title>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
 <style>
+:root {
+    --bg-main: #090d16;
+    --panel-bg: rgba(18, 26, 43, 0.75);
+    --panel-border: rgba(255, 255, 255, 0.08);
+    --panel-glass: rgba(255, 255, 255, 0.03);
+    --accent-gold: #f4c430;
+    --accent-gold-glow: rgba(244, 196, 48, 0.35);
+    --gold-grad: linear-gradient(135deg, #ffe89e 0%, #f4c430 50%, #b8860b 100%);
+    --text-main: #f0f4f8;
+    --text-muted: #8a99ad;
+    --board-bg: #0d1520;
+}
+
 *{box-sizing:border-box}
-body{margin:0;font-family:system-ui,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at 30% 20%,#1d3557,#0b1320);color:#fff;min-height:100vh;overflow-x:hidden}
+body{
+    margin:0;
+    font-family:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 50% 10%, #172437 0%, #080c14 70%);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+
 button,select,input{font:inherit}
-button{background:linear-gradient(#f9d65c,#d9a21b);color:#2a1d00;border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;min-height:40px;box-shadow:0 3px 0 #8a6410;transition:transform .1s}
-button:hover{transform:translateY(-1px)}button:active{transform:translateY(2px);box-shadow:none}
-button:disabled{opacity:.4;cursor:not-allowed}
-button.alt{background:#2c3e5c;color:#fff;box-shadow:0 3px 0 #16233b}
+
+button{
+    background: var(--gold-grad);
+    color: #0d121d;
+    border: 0;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    min-height: 44px;
+    box-shadow: 0 4px 15px rgba(244, 196, 48, 0.25), inset 0 1px 0 rgba(255,255,255,0.4);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+button:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 196, 48, 0.4), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+button:active{
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(244, 196, 48, 0.2);
+}
+button:disabled{
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    filter: grayscale(1);
+}
+button.alt{
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-main);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+}
+button.alt:hover{
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
 .scr{display:none}.scr.on{display:flex}
-.center{min-height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:16px;text-align:center}
-.logo{font-size:clamp(34px,8vw,68px);font-weight:900;background:linear-gradient(90deg,#f9d65c,#ff7b54,#f9d65c);-webkit-background-clip:text;background-clip:text;color:transparent;animation:glow 3s infinite alternate}
-@keyframes glow{to{filter:drop-shadow(0 0 14px #f9d65c)}}
-.menu button{display:block;width:min(320px,86vw);margin:8px auto;font-size:18px}
-.panel{background:#16233bcc;border:1px solid #ffffff22;border-radius:16px;padding:16px;width:min(460px,94vw);text-align:left}
-.panel label{display:block;margin:10px 0 4px;font-size:14px;opacity:.85}
-.panel input[type=text],.panel select{width:100%;padding:9px;border-radius:8px;border:0;background:#0b1320;color:#fff}
-#avs button{padding:4px 8px;margin:2px;font-size:20px;min-height:36px}#avs button.sel{outline:3px solid #fff}
+.center{
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    text-align: center;
+}
+
+.logo{
+    font-family: 'Cinzel', serif;
+    font-size: clamp(38px, 8vw, 72px);
+    font-weight: 900;
+    background: var(--gold-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 2px;
+    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: glow 3s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+@keyframes glow{
+    from{ filter: drop-shadow(0 0 10px rgba(244, 196, 48, 0.2)); }
+    to{ filter: drop-shadow(0 0 25px rgba(244, 196, 48, 0.6)); }
+}
+
+.menu button{
+    display: block;
+    width: min(340px, 86vw);
+    margin: 12px auto;
+    font-size: 16px;
+}
+
+.panel{
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 20px;
+    padding: 28px;
+    width: min(480px, 94vw);
+    text-align: left;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--panel-glass);
+}
+.panel h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--accent-gold);
+    margin-top: 0;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+}
+.panel label{
+    display: block;
+    margin: 14px 0 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.panel input[type=text], .panel input[type=number], .panel select{
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(8, 12, 20, 0.6);
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.panel input[type=text]:focus, .panel input[type=number]:focus, .panel select:focus{
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 3px var(--accent-gold-glow);
+}
+
+#avs{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+#avs button{
+    padding: 8px;
+    margin: 0;
+    font-size: 22px;
+    min-height: 44px;
+    width: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+}
+#avs button.sel{
+    outline: 2px solid var(--accent-gold);
+    background: rgba(244, 196, 48, 0.15);
+    transform: scale(1.05);
+}
+
 #game{flex-direction:column;min-height:100vh}
-header{display:flex;gap:8px;align-items:center;padding:8px 12px;background:#0b1320cc;flex-wrap:wrap}
-header b{font-size:18px}header .sp{flex:1}header button{padding:6px 10px;min-height:36px}
-.main{display:flex;gap:10px;padding:8px;flex:1;min-height:0}
-.bw{flex:1;display:grid;place-items:start center;min-width:0}
-.board{container-type:inline-size;width:min(100%,calc(100vh - 70px));aspect-ratio:1;display:grid;grid-template:1.5fr repeat(9,1fr) 1.5fr/1.5fr repeat(9,1fr) 1.5fr;background:#cfe8d3;border:5px solid #3b2a14;border-radius:14px;box-shadow:0 20px 50px #000a;position:relative}
-.c{border:1px solid #2b4a35;background:linear-gradient(#f3fbf4,#d6ecd9);color:#12261a;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;font-size:max(6px,1.1cqw);line-height:1.1;padding:1px;position:relative;overflow:hidden;min-width:0}
-.c .bar{height:24%;width:100%;font-size:max(6px,1.2cqw);display:flex;align-items:center;justify-content:center}
-.c .nm{font-weight:700;flex:1;display:flex;align-items:center}.c .pr{font-size:.9em}
-.c.corner{font-size:max(7px,1.4cqw);background:linear-gradient(#fff4c9,#f2d77a)}
-.tk{position:absolute;inset:auto 0 0 0;display:flex;flex-wrap:wrap;justify-content:center;gap:1px}
-.tkn{width:max(11px,2.4cqw);height:max(11px,2.4cqw);border-radius:50%;border:2px solid #fff;font-size:max(7px,1.4cqw);display:grid;place-items:center;box-shadow:0 2px 4px #0008;animation:pop .3s}
-@keyframes pop{from{transform:scale(2)}}
-.mid{grid-area:2/2/11/11;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2cqw;background:radial-gradient(#1f6f4a,#0f3f2a);color:#fff;text-align:center;padding:2cqw}
-.mid .t{font-size:5cqw;font-weight:900;color:#f9d65c;letter-spacing:.3cqw}
-#dice{display:flex;gap:2cqw}.die{font-size:10cqw;line-height:1;background:#fff;color:#111;border-radius:1.5cqw;padding:0 .8cqw;box-shadow:0 .6cqw 1.2cqw #0008}.die.sh{animation:sh .12s infinite}
-@keyframes sh{50%{transform:rotate(14deg) translateY(-4px)}}
-#msg{font-size:max(11px,2cqw);min-height:2.6em;max-width:90%}
-#card{position:absolute;left:50%;top:50%;width:34cqw;height:22cqw;margin:-11cqw 0 0 -17cqw;perspective:800px;display:none;z-index:5}
-#card div{width:100%;height:100%;border-radius:1.5cqw;padding:2cqw;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:2.2cqw;color:#111;text-align:center;animation:flip .7s;box-shadow:0 1cqw 3cqw #000a;border:.5cqw solid #fff}
-@keyframes flip{from{transform:rotateY(180deg) scale(.5)}}
-.side{width:330px;display:flex;flex-direction:column;gap:8px}
-#act{display:flex;flex-wrap:wrap;gap:6px}#act button{flex:1;min-width:110px;min-height:46px}
-#players{display:flex;flex-direction:column;gap:5px}
-.pc{background:#16233bdd;border-left:6px solid;border-radius:10px;padding:6px 8px;display:grid;grid-template-columns:auto 1fr auto;gap:0 8px;align-items:center;font-size:14px}
-.pc.act{background:#2f4a78;box-shadow:0 0 0 2px #f9d65c}.pc.out{opacity:.35;text-decoration:line-through}
-.pc .av{font-size:24px;grid-row:span 2}.pc small{grid-column:2/4;opacity:.8;font-size:11px}.pc i{opacity:.6;font-size:11px;margin-left:4px}.cash{color:#7dff9a;font-weight:700}
-#log{background:#0b1320cc;border-radius:10px;padding:8px;height:170px;overflow:auto;font-size:12px}#log div{padding:2px 0;border-bottom:1px solid #fff1}
-#modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:50;padding:12px}
-#modal .box{background:#16233b;border:1px solid #fff3;border-radius:16px;padding:18px;max-width:560px;width:100%;max-height:88vh;overflow:auto;animation:pop .25s}
-#modal h2{margin-top:0;color:#f9d65c}.row{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid #fff2;flex-wrap:wrap;font-size:13px}.row button{padding:4px 8px;min-height:30px;font-size:12px;margin-left:3px}
-.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px}
-#modal li{margin:6px 0}#modal code{background:#0b1320;padding:2px 5px;border-radius:4px;font-size:12px}
+header{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 20px;
+    background: rgba(8, 12, 20, 0.85);
+    border-bottom: 1px solid var(--panel-border);
+    backdrop-filter: blur(12px);
+    flex-wrap: wrap;
+}
+header b{
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    color: var(--accent-gold);
+    letter-spacing: 1px;
+}
+header #mode {
+    font-size: 12px;
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-muted);
+}
+header .sp{flex:1}
+header #turn {
+    font-weight: 700;
+    font-size: 14px;
+    background: rgba(244, 196, 48, 0.1);
+    border: 1px solid rgba(244, 196, 48, 0.25);
+    color: var(--accent-gold);
+    padding: 6px 14px;
+    border-radius: 20px;
+}
+header button{
+    padding: 6px 12px;
+    min-height: 36px;
+    font-size: 13px;
+}
+
+.main{
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    flex: 1;
+    min-height: 0;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+}
+.bw{
+    flex: 1;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+}
+
+/* Luxury Game Board */
+.board{
+    container-type: inline-size;
+    width: min(100%, calc(100vh - 110px));
+    aspect-ratio: 1;
+    display: grid;
+    grid-template: 1.5fr repeat(9, 1fr) 1.5fr / 1.5fr repeat(9, 1fr) 1.5fr;
+    background: #0b1520;
+    border: 12px solid #1a120b;
+    outline: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.5);
+    position: relative;
+}
+
+.c{
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(145deg, #162232, #0f1926);
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    font-size: max(7px, 1.15cqw);
+    line-height: 1.15;
+    padding: 2px;
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+    transition: background 0.2s;
+}
+.c .bar{
+    height: 22%;
+    width: 100%;
+    font-size: max(6px, 1.2cqw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    font-weight: 800;
+}
+.c .nm{
+    font-weight: 700;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 1px 2px;
+    color: #f1f5f9;
+}
+.c .pr{
+    font-size: 0.85em;
+    font-weight: 600;
+    opacity: 0.8;
+    color: var(--accent-gold);
+    margin-bottom: 2px;
+}
+.c.corner{
+    font-size: max(8px, 1.35cqw);
+    background: linear-gradient(135deg, #1c2b3d, #121d2b);
+    font-weight: 800;
+}
+
+.tk{
+    position: absolute;
+    inset: auto 2px 2px 2px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+    z-index: 3;
+}
+.tkn{
+    width: max(12px, 2.3cqw);
+    height: max(12px, 2.3cqw);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    font-size: max(7px, 1.3cqw);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+    animation: pop .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes pop{from{transform:scale(0)}}
+
+.mid{
+    grid-area: 2/2/11/11;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2cqw;
+    background: radial-gradient(circle at center, #152438 0%, #0a1018 100%);
+    color: #fff;
+    text-align: center;
+    padding: 2cqw;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.mid::before {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(244, 196, 48, 0.12);
+    pointer-events: none;
+}
+.mid .t{
+    font-family: 'Cinzel', serif;
+    font-size: 4.8cqw;
+    font-weight: 900;
+    background: var(--gold-grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: .4cqw;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+}
+
+#dice{display:flex; gap: 2cqw;}
+.die{
+    font-size: 7cqw;
+    line-height: 1;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    color: #111;
+    border-radius: 1.2cqw;
+    padding: 0.4cqw 0.8cqw;
+    box-shadow: 0 1cqw 2cqw rgba(0,0,0,0.5), inset 0 2px 0 #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.die.sh{animation:sh .12s infinite}
+@keyframes sh{50%{transform:rotate(12deg) translateY(-4px)}}
+
+#msg{
+    font-size: max(12px, 1.8cqw);
+    font-weight: 600;
+    min-height: 2.6em;
+    max-width: 85%;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#card{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 36cqw;
+    height: 23cqw;
+    margin: -11.5cqw 0 0 -18cqw;
+    perspective: 800px;
+    display: none;
+    z-index: 10;
+}
+#card div{
+    width: 100%;
+    height: 100%;
+    border-radius: 1.5cqw;
+    padding: 2cqw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 2cqw;
+    color: #0f172a;
+    text-align: center;
+    animation: flip .6s cubic-bezier(0.15, 0.85, 0.35, 1.2);
+    box-shadow: 0 2cqw 4cqw rgba(0,0,0,0.7);
+    border: .4cqw solid #fff;
+}
+@keyframes flip{from{transform:rotateY(180deg) scale(.4); opacity:0}}
+
+.side{
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+#act{display:flex;flex-wrap:wrap;gap:8px}
+#act button{flex:1;min-width:110px;min-height:48px;font-size:15px}
+
+#players{display:flex;flex-direction:column;gap:8px}
+.pc{
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-left: 5px solid;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 2px 10px;
+    align-items: center;
+    font-size: 14px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.pc.act{
+    background: rgba(30, 45, 71, 0.85);
+    box-shadow: 0 0 0 2px var(--accent-gold), 0 8px 20px rgba(0,0,0,0.3);
+    transform: translateX(4px);
+}
+.pc.out{opacity:.35; filter: grayscale(1); text-decoration:line-through}
+.pc .av{
+    font-size: 26px;
+    grid-row: span 2;
+    background: rgba(255,255,255,0.05);
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+}
+.pc b { font-weight: 700; color: #fff; }
+.pc small{grid-column:2/4; opacity:.75; font-size:11px; margin-top: 2px;}
+.pc i{opacity:.6;font-size:11px;margin-left:4px; font-style: normal; background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 4px;}
+.cash{color: #4ade80; font-weight: 800; font-size: 15px; font-family: monospace;}
+
+#log{
+    background: rgba(8, 12, 20, 0.7);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 12px;
+    height: 180px;
+    overflow-y: auto;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+#log div{
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+#log div:first-child { color: #fff; font-weight: 600; }
+
+#modal{
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 7, 13, 0.8);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: 16px;
+}
+#modal .box{
+    background: #111a28;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 88vh;
+    overflow: auto;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    animation: pop .25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#modal h2{margin-top:0;color:var(--accent-gold); font-family: 'Cinzel', serif;}
+.row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-wrap: wrap;
+    font-size: 13px;
+}
+.row button{padding: 6px 12px; min-height: 32px; font-size: 12px; margin-left: 4px;}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px; vertical-align: middle;}
+#modal li{margin:8px 0}
+#modal code{background:rgba(0,0,0,0.4); padding:3px 6px; border-radius:4px; font-size:12px; color: var(--accent-gold);}
+
 .cf{position:fixed;top:-30px;font-size:24px;animation:fall 3.5s linear forwards;z-index:60}@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
-@media(max-width:900px){.main{flex-direction:column}.side{width:100%}.board{width:100%}#players{flex-direction:row;overflow-x:auto}.pc{min-width:170px}}
-textarea{width:100%;height:90px;border-radius:8px;border:0;background:#0b1320;color:#fff;font-size:11px;word-break:break-all;margin:4px 0}#emo button{padding:4px 10px;min-height:36px}
+
+@media(max-width:900px){
+    .main{flex-direction:column; padding: 8px;}
+    .side{width:100%}
+    .board{width:100%}
+    #players{flex-direction:row;overflow-x:auto; padding-bottom: 4px;}
+    .pc{min-width:180px;}
+}
+
+textarea{
+    width:100%;
+    height:90px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.1);
+    background:rgba(8, 12, 20, 0.6);
+    color:#fff;
+    font-size:12px;
+    padding: 10px;
+    word-break:break-all;
+    margin:6px 0;
+}
+#emo button{padding: 6px 12px; min-height: 38px; font-size: 16px;}
 </style></head><body>
 
 <section id="menu" class="scr on center">
@@ -88,14 +566,17 @@ textarea{width:100%;height:90px;border-radius:8px;border:0;background:#0b1320;co
 </section>
 
 <section id="setup" class="scr center">
- <div class="panel"><h2 style="margin-top:0">Game Setup</h2>
+ <div class="panel"><h2>Game Setup</h2>
   <label>Your name</label><input type="text" id="pn" value="Player" maxlength="14">
   <label>Avatar</label><div id="avs"></div>
-  <label>AI opponents: <b id="nv">3</b></label><input type="range" id="nai" min="1" max="9" value="3" style="width:100%" oninput="nv.textContent=this.value">
+  <label>AI opponents: <b id="nv" style="color:var(--accent-gold)">3</b></label><input type="range" id="nai" min="1" max="9" value="3" style="width:100%" oninput="nv.textContent=this.value">
   <label>AI difficulty</label><select id="df"><option>Easy</option><option selected>Normal</option><option>Hard</option><option>Expert</option></select>
   <label>Starting money</label><select id="sm"><option>1000</option><option selected>1500</option><option>2500</option></select>
-  <label><input type="checkbox" id="pot"> House rule: taxes go to a Free Parking jackpot</label><br>
-  <button onclick="startGame()">Start Game</button> <button class="alt" onclick="go('menu')">Back</button>
+  <label style="display:flex; align-items:center; gap:8px; margin-top:16px; cursor:pointer;"><input type="checkbox" id="pot" style="width:auto"> House rule: taxes go to Free Parking jackpot</label><br>
+  <div style="display:flex; gap:10px; margin-top:10px;">
+    <button style="flex:1" onclick="startGame()">Start Game</button> 
+    <button class="alt" onclick="go('menu')">Back</button>
+  </div>
  </div>
 </section>
 
@@ -109,12 +590,17 @@ textarea{width:100%;height:90px;border-radius:8px;border:0;background:#0b1320;co
 </section>
 
 <section id="over" class="scr center"><div class="logo">🏆 Game Over</div><div class="panel" id="rank"></div>
- <div><button onclick="go('setup')">Play Again</button> <button class="alt" onclick="go('menu')">Main Menu</button></div></section>
+ <div style="margin-top:16px"><button onclick="go('setup')">Play Again</button> <button class="alt" onclick="go('menu')">Main Menu</button></div></section>
 
 <section id="lobby" class="scr center"><div class="logo" style="font-size:36px">🌐 Lobby</div>
-<div class="panel"><p>Room: <b id="lroom" style="color:#f9d65c;font-size:22px"></b></p><div id="lpl"></div>
-<div id="lhost"><p>AI fill-ins: <input type="number" id="lai" min="0" max="8" value="0" style="width:60px"></p><button class="alt" onclick="shareRoom()">🔗 Copy invite link</button> <button onclick="startOnline()">▶ Start game</button></div>
-<p style="font-size:12px;opacity:.75">Friends join with this room code via Online Multiplayer → Join.</p><p><button class="alt" onclick="leaveLobby()">Leave</button></p></div></section>
+<div class="panel"><p style="margin-top:0">Room Code: <b id="lroom" style="color:var(--accent-gold);font-size:24px; letter-spacing: 2px;"></b></p><div id="lpl"></div>
+<div id="lhost" style="margin-top:16px;"><p>AI fill-ins: <input type="number" id="lai" min="0" max="8" value="0" style="width:70px"></p>
+<div style="display:flex; gap:8px;">
+  <button class="alt" style="flex:1" onclick="shareRoom()">🔗 Copy Link</button> 
+  <button style="flex:1" onclick="startOnline()">▶ Start Game</button>
+</div>
+</div>
+<p style="font-size:12px;opacity:.75; margin-top:16px;">Friends join with this room code via Online Multiplayer → Join.</p><p><button class="alt" style="width:100%" onclick="leaveLobby()">Leave Lobby</button></p></div></section>
 <div id="modal"></div>
 
 <script>
@@ -230,7 +716,7 @@ async function land(p,r){const s=S[p.pos],t=s[1],i=p.pos;
  dash();await sleep(300)}
 
 async function draw(p,t){const deck=t=='cc'?CC:CH,d=G.dk[t],c=deck[d.o[d.n++%16]];
- NET.bc({t:'card',k:t,c:c[0]});const cd=$('#card');cd.firstChild.style.background=t=='cc'?'#ffd36b':'#ff9a76';cd.firstChild.textContent=(t=='cc'?'📦 ':'❓ ')+c[0];cd.style.display='block';cd.firstChild.style.animation='none';cd.firstChild.offsetWidth;cd.firstChild.style.animation='';
+ NET.bc({t:'card',k:t,c:c[0]});const cd=$('#card');cd.firstChild.style.background=t=='cc'?'linear-gradient(135deg, #ffe082, #ffca28)':'linear-gradient(135deg, #ffab91, #ff7043)';cd.firstChild.textContent=(t=='cc'?'📦 ':'❓ ')+c[0];cd.style.display='block';cd.firstChild.style.animation='none';cd.firstChild.offsetWidth;cd.firstChild.style.animation='';
  A.sfx('card');log(`🃏 ${p.name}: ${c[0]}`);await sleep(2000);NET.bc({t:'card'});cd.style.display='none';
  switch(c[1]){
   case 'm':if(c[2]>0){p.money+=c[2];A.sfx('cash')}else pay(p,-c[2],null);break;
@@ -288,15 +774,15 @@ function exitGame(){if(confirm('Exit the current game?')){if(G)G.over=true;NET.c
 function over(w){NET.bc({t:'st',s:snap()});NET.bc({t:'over',w:w.id});A.sfx('win');const rk=[w,...G.order.slice().reverse()];
  $('#rank').innerHTML=`<h2 style="margin-top:0">${w.av} ${w.name} wins!</h2>`+rk.map((p,i)=>`<div class="row"><span>#${i+1} ${p.av} ${p.name}${p.ai?' (AI)':''}</span><span>${p.out?'Bankrupt':'Net worth $'+worth(p)} · ${props(p).length} props</span></div>`).join('');
  go('over');for(let i=0;i<70;i++){const e=document.createElement('div');e.className='cf';e.textContent=['🎉','🪙','⭐','🎊'][i%4];e.style.left=Math.random()*100+'vw';e.style.animationDelay=Math.random()*1.5+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),5500)}}
-function settings(){show(`<h2>Settings</h2><label>Music volume <input type="range" min="0" max="100" value="${A.mv*100}" oninput="A.mv=this.value/100;A.save();A.vol()" style="width:100%"></label><label>Effects volume <input type="range" min="0" max="100" value="${A.sv*100}" oninput="A.sv=this.value/100;A.save();A.vol()" style="width:100%"></label><p><button onclick="A.toggle();settings()">Sound: ${A.on?'ON':'OFF'}</button> <button class="alt" onclick="hide()">Close</button></p>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
+function settings(){show(`<h2>Settings</h2><label>Music Volume <input type="range" min="0" max="100" value="${A.mv*100}" oninput="A.mv=this.value/100;A.save();A.vol()" style="width:100%"></label><label>Effects Volume <input type="range" min="0" max="100" value="${A.sv*100}" oninput="A.sv=this.value/100;A.save();A.vol()" style="width:100%"></label><p style="margin-top:20px; display:flex; gap:10px;"><button style="flex:1" onclick="A.toggle();settings()">Sound: ${A.on?'ON':'OFF'}</button> <button class="alt" style="flex:1" onclick="hide()">Close</button></p>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
 function howTo(){show(`<h2>📖 How to Play</h2><ol>
-<li>🎯 <b>Goal:</b> be the last player with money.</li><li>▶️ <b>Start:</b> choose opponents in Human vs AI and press Start.</li><li>🎲 <b>Roll</b> two dice on your turn. Doubles = roll again; three doubles = jail.</li><li>🚶 Your token moves that many spaces. Passing <b>GO</b> pays $200.</li>
-<li>🏠 <b>Buy</b> an unowned property you land on, or pass (it stays unowned in this build).</li><li>💸 <b>Rent:</b> land on someone's property and you pay. Full color group = double; houses and hotels raise it a lot. Railways and utilities scale with how many are owned.</li>
-<li>🏗 <b>Build</b> via Manage once you own a whole color group. Build evenly; 4 houses, then a hotel.</li><li>🤝 <b>Trading</b> is not in this build.</li><li>🃏 <b>Chance / Community Chest</b> draw a card with a surprise.</li>
-<li>🔒 <b>Jail:</b> roll doubles, pay $50, or use a Get Out of Jail card. After 3 failed tries you pay $50.</li><li>🏦 <b>Mortgage</b> a property (no houses) for half its price; unmortgage for price + 10%.</li><li>💥 <b>Bankruptcy:</b> if you can't pay even after selling houses and mortgaging, you are out and your assets go to the creditor.</li>
-<li>🏆 <b>Win</b> when everyone else is bankrupt.</li><li>🌐 <b>Multiplayer:</b> create a room, share the room code (or invite link), and friends join with it. The host's browser runs the game.</li></ol><button onclick="hide()">Got it!</button>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
+<li>🎯 <b>Goal:</b> Be the last player with money.</li><li>▶️ <b>Start:</b> Choose opponents in Human vs AI and press Start.</li><li>🎲 <b>Roll</b> two dice on your turn. Doubles = roll again; three doubles = jail.</li><li>🚶 Your token moves that many spaces. Passing <b>GO</b> pays $200.</li>
+<li>🏠 <b>Buy</b> an unowned property you land on, or pass.</li><li>💸 <b>Rent:</b> Land on someone's property and you pay. Full color group = double; houses and hotels raise it a lot. Railways and utilities scale with how many are owned.</li>
+<li>🏗 <b>Build</b> via Manage once you own a whole color group. Build evenly; 4 houses, then a hotel.</li><li>🃏 <b>Chance / Community Chest:</b> Draw a card with a surprise.</li>
+<li>🔒 <b>Jail:</b> Roll doubles, pay $50, or use a Get Out of Jail card. After 3 failed tries you pay $50.</li><li>🏦 <b>Mortgage</b> a property (no houses) for half its price; unmortgage for price + 10%.</li><li>💥 <b>Bankruptcy:</b> If you can't pay even after selling houses and mortgaging, you are out!</li>
+<li>🏆 <b>Win</b> when everyone else is bankrupt.</li></ol><button style="width:100%; margin-top:10px;" onclick="hide()">Got it!</button>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
+
 /* ============ NETWORKING: serverless WebRTC DataChannels, manual code-swap signaling ============ */
-/* Host-authoritative: only the host runs the engine. Guests receive state snapshots and send intents (answers, build/mortgage requests, chat). */
 const EMO=['😀','😂','😎','😡','🎉','👍'];
 const esc=t=>String(t).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
 const snap=()=>({pl:G.pl.map(p=>({name:p.name,av:p.av,ai:p.ai,pers:p.pers,id:p.id,col:p.col,money:p.money,pos:p.pos,jail:p.jail,gojf:p.gojf,out:p.out})),t:G.t,owner:G.owner,houses:G.houses,mort:G.mort,pot:G.pot,rules:G.rules,order:G.order.map(p=>p.id)});
@@ -316,7 +802,7 @@ popt(){return Object.assign({config:this.cfg()},NET_CONFIG.peerServer||{})},
   pr.on('open',()=>{go('lobby');this.lobby()});
   pr.on('connection',c=>this.accept(c));
   pr.on('error',e=>{if(this.role!='host')return;if(e.type=='unavailable-id'){this.host();return}alert('Could not create the room ('+e.type+'). Check your internet connection.');this.close();go('menu')})},
- lobby(){const names=[this.name+' 👑',...this.live().map(p=>p.name)];$('#lroom').textContent=this.room;$('#lpl').innerHTML=names.map((n,i)=>`<div class="row"><span>${AV[i]} ${esc(n)}</span><span>🟢 connected</span></div>`).join('');$('#lhost').style.display='block';this.bc({t:'lobby',names,room:this.room})},
+ lobby(){const names=[this.name+' 👑',...this.live().map(p=>p.name)];$('#lroom').textContent=this.room;$('#lpl').innerHTML=names.map((n,i)=>`<div class="row"><span>${AV[i]} ${esc(n)}</span><span style="color:#4ade80">🟢 connected</span></div>`).join('');$('#lhost').style.display='block';this.bc({t:'lobby',names,room:this.room})},
  accept(c){const full=G&&!G.over?'This game has already started.':this.peers.length>=9?'Room is full (10 players max).':null;
   if(full){c.on('open',()=>{c.send(JSON.stringify({t:'full',why:full}));setTimeout(()=>c.close(),500)});return}
   const peer={pc:c,dc:{send:x=>c.send(x),get readyState(){return c.open?'open':'closed'}},name:null};this.peers.push(peer);
@@ -343,12 +829,12 @@ popt(){return Object.assign({config:this.cfg()},NET_CONFIG.peerServer||{})},
  clientMsg(m){switch(m.t){
   case 'full':alert(m.why||'Room is full.');this.close();go('menu');break;
   case 'you':this.me=m.id;break;
-  case 'lobby':$('#lroom').textContent=m.room;$('#lpl').innerHTML=m.names.map((n,i)=>`<div class="row"><span>${AV[i]} ${esc(n)}</span><span>🟢 connected</span></div>`).join('');break;
+  case 'lobby':$('#lroom').textContent=m.room;$('#lpl').innerHTML=m.names.map((n,i)=>`<div class="row"><span>${AV[i]} ${esc(n)}</span><span style="color:#4ade80">🟢 connected</span></div>`).join('');break;
   case 'start':G=null;$('#log').innerHTML='';$('#mode').textContent=m.label;$('#emo').style.display='flex';buildBoard();go('game');break;
   case 'st':G=G||{over:false};Object.assign(G,m.s);G.order=m.s.order.map(i=>G.pl[i]);for(let i=0;i<40;i++)uc(i);tokens();dash();if(this.redraw)this.redraw();break;
   case 'log':log(m.h);break;case 'say':say(m.x);break;case 'sfx':A.sfx(m.n);break;
   case 'dice':{const F='⚀⚁⚂⚃⚄⚅';$$('.die').forEach((d,i)=>d.textContent=F[m.r[i]-1]);break}
-  case 'card':{const cd=$('#card');if(!m.c){cd.style.display='none';break}cd.firstChild.style.background=m.k=='cc'?'#ffd36b':'#ff9a76';cd.firstChild.textContent=(m.k=='cc'?'📦 ':'❓ ')+m.c;cd.style.display='block';break}
+  case 'card':{const cd=$('#card');if(!m.c){cd.style.display='none';break}cd.firstChild.style.background=m.k=='cc'?'linear-gradient(135deg, #ffe082, #ffca28)':'linear-gradient(135deg, #ffab91, #ff7043)';cd.firstChild.textContent=(m.k=='cc'?'📦 ':'❓ ')+m.c;cd.style.display='block';break}
   case 'ask':ask(m.m,m.o).then(i=>this.send({t:'ans',i}));break;
   case 'manage':manage(G.pl[this.me]);break;
   case 'over':over(G.pl[m.w]);break}}};
@@ -359,8 +845,7 @@ $('#emo').innerHTML=EMO.map(e=>`<button class="alt" onclick="chat('${e}')">${e}<
 function leaveLobby(){NET.close();go('menu')}
 function shareRoom(){const u=location.href.split(/[?#]/)[0]+'?room='+NET.room;try{navigator.clipboard.writeText(u)}catch(e){}alert('Room code: '+NET.room+'\nInvite link (copied): '+u)}
 function netMenu(pre){A.sfx('click');if(!window.Peer){show('<h2>Not available</h2><p>The connection library could not load. Online play needs an internet connection.</p><button onclick="hide()">Close</button>');return}
- const inp='style="width:100%;padding:9px;border-radius:8px;border:0;background:#0b1320;color:#fff;text-transform:uppercase"';
- show(`<h2>🌐 Online Multiplayer</h2><label>Your name</label><input type="text" id="nn" value="Player" maxlength="14" ${inp}><p><button onclick="NET.name=nm();hide();NET.host()">➕ Create room</button></p><label>Or join with a room code</label><input type="text" id="rcode" value="${pre||''}" maxlength="8" placeholder="e.g. K7M2P" ${inp}><p><button onclick="NET.name=nm();NET.join($('#rcode').value)">Join room</button> <button class="alt" onclick="hide()">Close</button></p><p style="font-size:12px;opacity:.75">Room codes are matched through the free public PeerJS broker; game data then flows directly between browsers (WebRTC). 2–10 players. If someone drops, an AI takes their seat. Optional TURN relay: <code>NET_CONFIG.turn</code>.</p>`)}
+ show(`<h2>🌐 Online Multiplayer</h2><label>Your Name</label><input type="text" id="nn" value="Player" maxlength="14"><p><button style="width:100%" onclick="NET.name=nm();hide();NET.host()">➕ Create Room</button></p><label>Or Join With Code</label><input type="text" id="rcode" value="${pre||''}" maxlength="8" placeholder="e.g. K7M2P" style="text-transform:uppercase"><p style="display:flex; gap:10px; margin-top:12px;"><button style="flex:1" onclick="NET.name=nm();NET.join($('#rcode').value)">Join Room</button> <button class="alt" style="flex:1" onclick="hide()">Close</button></p>`)}
 function startOnline(){const peers=NET.live();if(!peers.length){alert('Invite at least one player first.');return}A.init();
  const pl=[{name:NET.name,av:AV[0],ai:false},...peers.map((q,i)=>({name:q.name,av:AV[i+1],ai:false,net:q}))];
  const n=Math.min(+$('#lai').value||0,10-pl.length);for(let i=0;i<n;i++){const pr=PERS[Math.random()*5|0];pl.push({name:AIN[i],av:AV[pl.length],ai:true,D:DIFF.Normal,pers:pr[0],mod:pr[1]})}
