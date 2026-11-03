@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
 
-
     <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-7963880628277539">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7963880628277539" crossorigin="anonymous"></script>
-
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-PGR4Y0TVNP"></script>
@@ -20,21 +18,21 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Kapital Kings</title>
+<title>Kapital Kings: Indian Edition</title>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root {
     --bg-main: #090d16;
-    --panel-bg: rgba(18, 26, 43, 0.75);
-    --panel-border: rgba(255, 255, 255, 0.08);
-    --panel-glass: rgba(255, 255, 255, 0.03);
+    --panel-bg: rgba(18, 26, 43, 0.85);
+    --panel-border: rgba(255, 255, 255, 0.1);
+    --panel-glass: rgba(255, 255, 255, 0.04);
     --accent-gold: #f4c430;
     --accent-gold-glow: rgba(244, 196, 48, 0.35);
     --gold-grad: linear-gradient(135deg, #ffe89e 0%, #f4c430 50%, #b8860b 100%);
     --text-main: #f0f4f8;
-    --text-muted: #8a99ad;
-    --board-bg: #0d1520;
+    --text-muted: #94a3b8;
+    --board-bg: #0a111a;
 }
 
 *{box-sizing:border-box}
@@ -48,11 +46,9 @@ body{
     -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Scrollbars */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
 
 button,select,input{font:inherit}
 
@@ -61,15 +57,17 @@ button{
     color: #0d121d;
     border: 0;
     border-radius: 10px;
-    padding: 12px 20px;
+    padding: 10px 18px;
     font-weight: 800;
     letter-spacing: 0.3px;
     cursor: pointer;
-    min-height: 44px;
+    min-height: 42px;
     box-shadow: 0 4px 15px rgba(244, 196, 48, 0.25), inset 0 1px 0 rgba(255,255,255,0.4);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 button:hover{
     transform: translateY(-2px);
@@ -87,16 +85,15 @@ button:disabled{
     filter: grayscale(1);
 }
 button.alt{
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.08);
     color: var(--text-main);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px);
 }
 button.alt:hover{
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .scr{display:none}.scr.on{display:flex}
@@ -112,7 +109,7 @@ button.alt:hover{
 
 .logo{
     font-family: 'Cinzel', serif;
-    font-size: clamp(38px, 8vw, 72px);
+    font-size: clamp(36px, 8vw, 68px);
     font-weight: 900;
     background: var(--gold-grad);
     -webkit-background-clip: text;
@@ -120,7 +117,7 @@ button.alt:hover{
     color: transparent;
     letter-spacing: 2px;
     text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    animation: glow 3s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    animation: glow 3s infinite alternate;
 }
 @keyframes glow{
     from{ filter: drop-shadow(0 0 10px rgba(244, 196, 48, 0.2)); }
@@ -128,7 +125,7 @@ button.alt:hover{
 }
 
 .menu button{
-    display: block;
+    display: flex;
     width: min(340px, 86vw);
     margin: 12px auto;
     font-size: 16px;
@@ -138,25 +135,23 @@ button.alt:hover{
     background: var(--panel-bg);
     border: 1px solid var(--panel-border);
     backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border-radius: 20px;
     padding: 28px;
     width: min(480px, 94vw);
     text-align: left;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--panel-glass);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 .panel h2 {
     font-family: 'Cinzel', serif;
     color: var(--accent-gold);
     margin-top: 0;
     margin-bottom: 18px;
-    letter-spacing: 1px;
 }
 .panel label{
     display: block;
     margin: 14px 0 6px;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 12px;
+    font-weight: 800;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -165,157 +160,125 @@ button.alt:hover{
     width: 100%;
     padding: 12px 14px;
     border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(8, 12, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(8, 12, 20, 0.7);
     color: #fff;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
 }
 .panel input[type=text]:focus, .panel input[type=number]:focus, .panel select:focus{
     border-color: var(--accent-gold);
     box-shadow: 0 0 0 3px var(--accent-gold-glow);
 }
 
-#avs{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-#avs button{
-    padding: 8px;
-    margin: 0;
-    font-size: 22px;
-    min-height: 44px;
-    width: 44px;
-    display: grid;
-    place-items: center;
-    border-radius: 10px;
-}
-#avs button.sel{
-    outline: 2px solid var(--accent-gold);
-    background: rgba(244, 196, 48, 0.15);
-    transform: scale(1.05);
-}
+#avs{ display: flex; flex-wrap: wrap; gap: 6px; }
+#avs button{ padding: 8px; font-size: 22px; min-height: 44px; width: 44px; border-radius: 10px; }
+#avs button.sel{ outline: 2px solid var(--accent-gold); background: rgba(244, 196, 48, 0.2); transform: scale(1.05); }
 
-#game{flex-direction:column;min-height:100vh}
+#game{ flex-direction: column; height: 100vh; overflow: hidden; }
 header{
     display: flex;
     gap: 12px;
     align-items: center;
-    padding: 12px 20px;
-    background: rgba(8, 12, 20, 0.85);
+    padding: 8px 16px;
+    background: rgba(8, 12, 20, 0.9);
     border-bottom: 1px solid var(--panel-border);
     backdrop-filter: blur(12px);
     flex-wrap: wrap;
+    z-index: 20;
+    height: 52px;
+    flex-shrink: 0;
 }
-header b{
-    font-family: 'Cinzel', serif;
-    font-size: 20px;
-    color: var(--accent-gold);
-    letter-spacing: 1px;
-}
-header #mode {
-    font-size: 12px;
-    padding: 4px 10px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.08);
-    color: var(--text-muted);
-}
-header .sp{flex:1}
-header #turn {
-    font-weight: 700;
-    font-size: 14px;
-    background: rgba(244, 196, 48, 0.1);
-    border: 1px solid rgba(244, 196, 48, 0.25);
-    color: var(--accent-gold);
-    padding: 6px 14px;
-    border-radius: 20px;
-}
-header button{
-    padding: 6px 12px;
-    min-height: 36px;
-    font-size: 13px;
-}
+header b{ font-family: 'Cinzel', serif; font-size: 18px; color: var(--accent-gold); }
+header #mode { font-size: 11px; padding: 3px 8px; background: rgba(255,255,255,0.08); border-radius: 12px; color: var(--text-muted); }
+header .sp{ flex: 1; }
+header #turn { font-weight: 800; font-size: 13px; background: rgba(244, 196, 48, 0.12); border: 1px solid rgba(244, 196, 48, 0.3); color: var(--accent-gold); padding: 4px 12px; border-radius: 16px; }
+header button{ padding: 4px 10px; min-height: 32px; font-size: 12px; }
 
+/* Dynamic Responsive Layout: Full Width & Full Screen Fill */
 .main{
     display: flex;
-    gap: 16px;
-    padding: 16px;
+    gap: 12px;
+    padding: 10px;
     flex: 1;
-    min-height: 0;
-    max-width: 1600px;
-    margin: 0 auto;
-    width: 100%;
+    height: calc(100vh - 52px);
+    width: 100vw;
+    overflow: hidden;
 }
 .bw{
     flex: 1;
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
     min-width: 0;
+    min-height: 0;
 }
 
-/* Luxury Game Board */
+/* Dynamic Fluid Rectangular Game Board */
 .board{
-    container-type: inline-size;
-    width: min(100%, calc(100vh - 110px));
-    aspect-ratio: 1;
+    container-type: size;
+    width: 100%;
+    height: 100%;
     display: grid;
-    grid-template: 1.5fr repeat(9, 1fr) 1.5fr / 1.5fr repeat(9, 1fr) 1.5fr;
-    background: #0b1520;
-    border: 12px solid #1a120b;
-    outline: 1px solid rgba(255,255,255,0.1);
+    grid-template: 1.4fr repeat(9, 1fr) 1.4fr / 1.4fr repeat(9, 1fr) 1.4fr;
+    background: #0a111a;
+    border: 8px solid #1c140d;
     border-radius: 12px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.5);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
     position: relative;
 }
 
 .c{
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: linear-gradient(145deg, #162232, #0f1926);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(145deg, #162335, #0d1724);
     color: #e2e8f0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     text-align: center;
-    font-size: max(7px, 1.15cqw);
-    line-height: 1.15;
-    padding: 2px;
     position: relative;
     overflow: hidden;
     min-width: 0;
-    transition: background 0.2s;
+    min-height: 0;
+    padding: 2px;
 }
 .c .bar{
-    height: 22%;
+    height: 26%;
     width: 100%;
-    font-size: max(6px, 1.2cqw);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    font-size: clamp(10px, 1.8cqmin, 16px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
     font-weight: 800;
 }
 .c .nm{
-    font-weight: 700;
+    font-weight: 800;
     flex: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 1px 2px;
-    color: #f1f5f9;
+    color: #ffffff;
+    /* Big text scaling dynamically based on viewport/container size */
+    font-size: clamp(9px, 1.45cqmin, 15px);
+    line-height: 1.1;
+    word-break: break-word;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
 .c .pr{
-    font-size: 0.85em;
-    font-weight: 600;
-    opacity: 0.8;
+    font-size: clamp(8px, 1.2cqmin, 13px);
+    font-weight: 700;
     color: var(--accent-gold);
     margin-bottom: 2px;
 }
 .c.corner{
-    font-size: max(8px, 1.35cqw);
-    background: linear-gradient(135deg, #1c2b3d, #121d2b);
+    background: linear-gradient(135deg, #1d2d42, #111a28);
     font-weight: 800;
+}
+.c.corner .nm{
+    font-size: clamp(10px, 1.6cqmin, 17px);
 }
 
 .tk{
@@ -328,14 +291,14 @@ header button{
     z-index: 3;
 }
 .tkn{
-    width: max(12px, 2.3cqw);
-    height: max(12px, 2.3cqw);
+    width: clamp(14px, 2.8cqmin, 26px);
+    height: clamp(14px, 2.8cqmin, 26px);
     border-radius: 50%;
     border: 2px solid #fff;
-    font-size: max(7px, 1.3cqw);
+    font-size: clamp(8px, 1.6cqmin, 15px);
     display: grid;
     place-items: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.7);
     animation: pop .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 @keyframes pop{from{transform:scale(0)}}
@@ -346,42 +309,41 @@ header button{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2cqw;
-    background: radial-gradient(circle at center, #152438 0%, #0a1018 100%);
+    gap: 1.5cqmin;
+    background: radial-gradient(circle at center, #142236 0%, #080d14 100%);
     color: #fff;
     text-align: center;
-    padding: 2cqw;
+    padding: 2cqmin;
     position: relative;
     border: 1px solid rgba(255,255,255,0.05);
 }
 .mid::before {
     content: '';
     position: absolute;
-    inset: 12px;
-    border: 1px solid rgba(244, 196, 48, 0.12);
+    inset: 10px;
+    border: 1px solid rgba(244, 196, 48, 0.15);
     pointer-events: none;
 }
 .mid .t{
     font-family: 'Cinzel', serif;
-    font-size: 4.8cqw;
+    font-size: clamp(18px, 5cqmin, 48px);
     font-weight: 900;
     background: var(--gold-grad);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    letter-spacing: .4cqw;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+    letter-spacing: 2px;
 }
 
-#dice{display:flex; gap: 2cqw;}
+#dice{ display:flex; gap: 10px; }
 .die{
-    font-size: 7cqw;
+    font-size: clamp(28px, 6cqmin, 54px);
     line-height: 1;
     background: linear-gradient(145deg, #ffffff, #e6e6e6);
     color: #111;
-    border-radius: 1.2cqw;
-    padding: 0.4cqw 0.8cqw;
-    box-shadow: 0 1cqw 2cqw rgba(0,0,0,0.5), inset 0 2px 0 #fff;
+    border-radius: 8px;
+    padding: 4px 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.6);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -390,11 +352,11 @@ header button{
 @keyframes sh{50%{transform:rotate(12deg) translateY(-4px)}}
 
 #msg{
-    font-size: max(12px, 1.8cqw);
-    font-weight: 600;
-    min-height: 2.6em;
-    max-width: 85%;
-    color: #e2e8f0;
+    font-size: clamp(12px, 2cqmin, 20px);
+    font-weight: 700;
+    min-height: 2.4em;
+    max-width: 90%;
+    color: #f1f5f9;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -404,9 +366,9 @@ header button{
     position: absolute;
     left: 50%;
     top: 50%;
-    width: 36cqw;
-    height: 23cqw;
-    margin: -11.5cqw 0 0 -18cqw;
+    width: clamp(200px, 35cqmin, 360px);
+    height: clamp(130px, 22cqmin, 220px);
+    transform: translate(-50%, -50%);
     perspective: 800px;
     display: none;
     z-index: 10;
@@ -414,87 +376,84 @@ header button{
 #card div{
     width: 100%;
     height: 100%;
-    border-radius: 1.5cqw;
-    padding: 2cqw;
+    border-radius: 16px;
+    padding: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 2cqw;
+    font-weight: 800;
+    font-size: clamp(13px, 2cqmin, 18px);
     color: #0f172a;
     text-align: center;
     animation: flip .6s cubic-bezier(0.15, 0.85, 0.35, 1.2);
-    box-shadow: 0 2cqw 4cqw rgba(0,0,0,0.7);
-    border: .4cqw solid #fff;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    border: 4px solid #fff;
 }
 @keyframes flip{from{transform:rotateY(180deg) scale(.4); opacity:0}}
 
 .side{
-    width: 340px;
+    width: 320px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+    height: 100%;
+    flex-shrink: 0;
 }
-#act{display:flex;flex-wrap:wrap;gap:8px}
-#act button{flex:1;min-width:110px;min-height:48px;font-size:15px}
+#act{display:flex;flex-wrap:wrap;gap:6px}
+#act button{flex:1;min-width:100px;min-height:44px;font-size:14px}
 
-#players{display:flex;flex-direction:column;gap:8px}
+#players{display:flex;flex-direction:column;gap:6px; flex-shrink: 0;}
 .pc{
     background: var(--panel-bg);
     border: 1px solid var(--panel-border);
     border-left: 5px solid;
-    border-radius: 12px;
-    padding: 10px 12px;
+    border-radius: 10px;
+    padding: 8px 10px;
     display: grid;
     grid-template-columns: auto 1fr auto;
-    gap: 2px 10px;
+    gap: 2px 8px;
     align-items: center;
-    font-size: 14px;
-    backdrop-filter: blur(10px);
-    transition: transform 0.2s, box-shadow 0.2s;
+    font-size: 13px;
 }
 .pc.act{
-    background: rgba(30, 45, 71, 0.85);
-    box-shadow: 0 0 0 2px var(--accent-gold), 0 8px 20px rgba(0,0,0,0.3);
-    transform: translateX(4px);
+    background: rgba(30, 45, 71, 0.9);
+    box-shadow: 0 0 0 2px var(--accent-gold);
 }
 .pc.out{opacity:.35; filter: grayscale(1); text-decoration:line-through}
 .pc .av{
-    font-size: 26px;
+    font-size: 22px;
     grid-row: span 2;
-    background: rgba(255,255,255,0.05);
-    width: 40px;
-    height: 40px;
+    background: rgba(255,255,255,0.06);
+    width: 36px;
+    height: 36px;
     display: grid;
     place-items: center;
     border-radius: 8px;
 }
-.pc b { font-weight: 700; color: #fff; }
-.pc small{grid-column:2/4; opacity:.75; font-size:11px; margin-top: 2px;}
-.pc i{opacity:.6;font-size:11px;margin-left:4px; font-style: normal; background: rgba(255,255,255,0.1); padding: 1px 5px; border-radius: 4px;}
-.cash{color: #4ade80; font-weight: 800; font-size: 15px; font-family: monospace;}
+.pc b { font-weight: 800; color: #fff; }
+.pc small{grid-column:2/4; opacity:.8; font-size:10.5px;}
+.pc i{opacity:.7;font-size:10px;margin-left:4px; font-style: normal; background: rgba(255,255,255,0.1); padding: 1px 4px; border-radius: 4px;}
+.cash{color: #4ade80; font-weight: 800; font-size: 14px; font-family: monospace;}
 
 #log{
-    background: rgba(8, 12, 20, 0.7);
+    background: rgba(8, 12, 20, 0.8);
     border: 1px solid var(--panel-border);
-    border-radius: 12px;
-    padding: 12px;
-    height: 180px;
+    border-radius: 10px;
+    padding: 10px;
+    flex: 1;
+    min-height: 120px;
     overflow-y: auto;
-    font-size: 12px;
-    line-height: 1.5;
+    font-size: 11.5px;
+    line-height: 1.45;
     color: var(--text-muted);
 }
-#log div{
-    padding: 4px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-#log div:first-child { color: #fff; font-weight: 600; }
+#log div{ padding: 3px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+#log div:first-child { color: #fff; font-weight: 700; }
 
 #modal{
     position: fixed;
     inset: 0;
-    background: rgba(4, 7, 13, 0.8);
+    background: rgba(4, 7, 13, 0.85);
     backdrop-filter: blur(8px);
     display: none;
     align-items: center;
@@ -504,15 +463,15 @@ header button{
 }
 #modal .box{
     background: #111a28;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 20px;
     padding: 24px;
     max-width: 560px;
     width: 100%;
     max-height: 88vh;
     overflow: auto;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-    animation: pop .25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+    animation: pop .25s ease-out;
 }
 #modal h2{margin-top:0;color:var(--accent-gold); font-family: 'Cinzel', serif;}
 .row{
@@ -525,38 +484,28 @@ header button{
     flex-wrap: wrap;
     font-size: 13px;
 }
-.row button{padding: 6px 12px; min-height: 32px; font-size: 12px; margin-left: 4px;}
+.row button{padding: 5px 10px; min-height: 30px; font-size: 11.5px;}
 .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px; vertical-align: middle;}
 #modal li{margin:8px 0}
 #modal code{background:rgba(0,0,0,0.4); padding:3px 6px; border-radius:4px; font-size:12px; color: var(--accent-gold);}
 
 .cf{position:fixed;top:-30px;font-size:24px;animation:fall 3.5s linear forwards;z-index:60}@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 
-@media(max-width:900px){
-    .main{flex-direction:column; padding: 8px;}
-    .side{width:100%}
-    .board{width:100%}
-    #players{flex-direction:row;overflow-x:auto; padding-bottom: 4px;}
-    .pc{min-width:180px;}
+/* Mobile Responsive Overrides */
+@media(max-width:850px){
+    header{ height: auto; padding: 6px 10px; }
+    .main{ flex-direction: column; height: calc(100vh - 75px); padding: 4px; gap: 6px; }
+    .bw{ height: 62vh; width: 100%; }
+    .side{ width: 100%; height: 38vh; gap: 6px; }
+    #players{ flex-direction: row; overflow-x: auto; padding-bottom: 2px; }
+    .pc{ min-width: 160px; }
+    #log{ min-height: 0; }
 }
-
-textarea{
-    width:100%;
-    height:90px;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,0.1);
-    background:rgba(8, 12, 20, 0.6);
-    color:#fff;
-    font-size:12px;
-    padding: 10px;
-    word-break:break-all;
-    margin:6px 0;
-}
-#emo button{padding: 6px 12px; min-height: 38px; font-size: 16px;}
 </style></head><body>
 
 <section id="menu" class="scr on center">
  <div class="logo">🎩 KAPITAL KINGS</div>
+ <div style="font-weight:700; color:var(--accent-gold); letter-spacing:1px; margin-bottom:8px;">🇮🇳 INDIAN EDITION</div>
  <div class="menu">
   <button onclick="A.sfx('click');go('setup')">🤖 Human vs AI</button>
   <button class="alt" onclick="netMenu()">🌐 Online Multiplayer</button>
@@ -567,12 +516,12 @@ textarea{
 
 <section id="setup" class="scr center">
  <div class="panel"><h2>Game Setup</h2>
-  <label>Your name</label><input type="text" id="pn" value="Player" maxlength="14">
+  <label>Your name</label><input type="text" id="pn" value="Raja" maxlength="14">
   <label>Avatar</label><div id="avs"></div>
   <label>AI opponents: <b id="nv" style="color:var(--accent-gold)">3</b></label><input type="range" id="nai" min="1" max="9" value="3" style="width:100%" oninput="nv.textContent=this.value">
   <label>AI difficulty</label><select id="df"><option>Easy</option><option selected>Normal</option><option>Hard</option><option>Expert</option></select>
-  <label>Starting money</label><select id="sm"><option>1000</option><option selected>1500</option><option>2500</option></select>
-  <label style="display:flex; align-items:center; gap:8px; margin-top:16px; cursor:pointer;"><input type="checkbox" id="pot" style="width:auto"> House rule: taxes go to Free Parking jackpot</label><br>
+  <label>Starting cash (₹)</label><select id="sm"><option value="1000">₹1,000</option><option value="1500" selected>₹1,500</option><option value="2500">₹2,500</option></select>
+  <label style="display:flex; align-items:center; gap:8px; margin-top:14px; cursor:pointer;"><input type="checkbox" id="pot" style="width:auto"> House rule: taxes go to Free Parking jackpot</label><br>
   <div style="display:flex; gap:10px; margin-top:10px;">
     <button style="flex:1" onclick="startGame()">Start Game</button> 
     <button class="alt" onclick="go('menu')">Back</button>
@@ -605,22 +554,51 @@ textarea{
 
 <script>
 'use strict';
-/* ============ ONLINE CONFIG (see Online Multiplayer dialog) ============ */
-const NET_CONFIG={peerServer:null/* optional own PeerJS server {host,port,path,secure}; null = free public PeerJS broker */,iceServers:[{urls:'stun:stun.l.google.com:19302'}],turn:{urls:'',username:'',credential:''}};
+/* ============ ONLINE CONFIG ============ */
+const NET_CONFIG={peerServer:null,iceServers:[{urls:'stun:stun.l.google.com:19302'}],turn:{urls:'',username:'',credential:''}};
 
-/* ============ BOARD DATA ============ */
+/* ============ LOCALIZED INDIAN BOARD DATA ============ */
 const GC={br:'#8b5a3c',lb:'#9ad7f5',pk:'#e25fa7',or:'#f39c34',rd:'#e03c3c',ye:'#f6e04a',gr:'#2ea25a',bl:'#2b52c9'};
-const S=[['GO','go'],['Mediterranean','p',60,'br'],['Community Chest','cc'],['Baltic','p',60,'br'],['Income Tax','tax',200],['Reading Rail','rr',200],['Oriental','p',100,'lb'],['Chance','ch'],['Vermont','p',100,'lb'],['Connecticut','p',120,'lb'],
-['Jail / Visiting','jail'],['St. Charles','p',140,'pk'],['Electric Co.','u',150],['States','p',140,'pk'],['Virginia','p',160,'pk'],['Penn Rail','rr',200],['St. James','p',180,'or'],['Community Chest','cc'],['Tennessee','p',180,'or'],['New York','p',200,'or'],
-['Free Parking','fp'],['Kentucky','p',220,'rd'],['Chance','ch'],['Indiana','p',220,'rd'],['Illinois','p',240,'rd'],['B&O Rail','rr',200],['Atlantic','p',260,'ye'],['Ventnor','p',260,'ye'],['Water Works','u',150],['Marvin','p',280,'ye'],
-['Go To Jail','gj'],['Pacific','p',300,'gr'],['N. Carolina','p',300,'gr'],['Community Chest','cc'],['Pennsylvania','p',320,'gr'],['Short Line','rr',200],['Chance','ch'],['Park Place','p',350,'bl'],['Luxury Tax','tax',100],['Boardwalk','p',400,'bl']];
-const IC={go:'➡️ ',cc:'📦',ch:'❓',tax:'💰',rr:'🚂',u:'💡',jail:'🔒',fp:'🅿️',gj:'👮'};
+const S=[
+  ['START (GO)','go'],
+  ['Chandni Chowk','p',60,'br'],
+  ['Community Box','cc'],
+  ['Old Delhi','p',60,'br'],
+  ['GST Tax','tax',200],
+  ['CST Terminus','rr',200],
+  ['Park Street','p',100,'lb'],
+  ['Fate Card','ch'],
+  ['Howrah','p',100,'lb'],
+  ['Salt Lake','p',120,'lb'],
+  ['Jail / Visiting','jail'],
+  ['Sabarmati','p',140,'pk'],
+  ['Tata Power','u',150],
+  ['CG Road','p',140,'pk'],
+  ['SG Highway','p',160,'pk'],
+  ['New Delhi Stn','rr',200],
+  ['FC Road','p',180,'or'],
+  ['Community Box','cc'],
+  ['Deccan Gym','p',180,'or'],
+  ['Koregaon Park','p',200,'or'],
+  ['Free Parking','fp'],
+  ['MG Road (BLR)','p',220,'rd'],
+  ['Fate Card','ch'],
+  ['Indiranagar','p',220,'rd'],
+  ['Koramangala','p',240,'rd'],
+  ['Howrah Junction','rr',200],
+  ['Charminar','p',260,'ye'],
+  ['Banjara Hills','p',260,'ye'],
+  ['Jal Board','u',150],
+  ['Jubilee Hills','p',280,'ye'],
+  ['Go To Jail','gj'],['Connaught Place','p',300,'gr'],['Khan Market','p',300,'gr'],['Community Box','cc'],['Golf Links','p',320,'gr'],['Chennai Central','rr',200],['Fate Card','ch'],['Bandra West','p',350,'bl'],['Wealth Tax','tax',100],['Marine Drive','p',400,'bl']
+];
+const IC={go:'🏁',cc:'📦',ch:'🔮',tax:'💸',rr:'🚂',u:'⚡',jail:'🔒',fp:'🅿️',gj:'👮'};
 const GO_ORDER=['br','lb','pk','or','rd','ye','gr','bl'];
-const CH=[['Advance to GO','a',0],['Advance to Illinois','a',24],['Advance to Boardwalk','a',39],['Take a trip to Reading Rail','a',5],['Advance to St. Charles','a',11],['Bank pays you a dividend of $50','m',50],['Get Out of Jail Free!','f'],['Go back 3 spaces','b'],['Go directly to Jail','j'],['Pay poor tax of $15','m',-15],['Building loan matures: collect $150','m',150],['You are elected chairman: pay each player $50','e',-50],['Property repairs: $25/house, $100/hotel','r',25,100],['Crossword winner! Collect $100','m',100],['Advance to nearest railway','n'],['Speeding fine: pay $60','m',-60]];
-const CC=[['Advance to GO','a',0],['Bank error in your favor: collect $200','m',200],['Doctor fees: pay $50','m',-50],['Stock sale: collect $50','m',50],['Get Out of Jail Free!','f'],['Go directly to Jail','j'],['Holiday fund: collect $100','m',100],['Tax refund: collect $20','m',20],['Birthday! Collect $10 from every player','e',10],['Life insurance matures: $100','m',100],['Hospital fees: pay $100','m',-100],['School fees: pay $50','m',-50],['Consultancy fee: collect $25','m',25],['Street repairs: $40/house, $115/hotel','r',40,115],['Beauty contest: collect $10','m',10],['Inheritance: collect $100','m',100]];
-const AV=['🦁','🐯','🦊','🐼','🐸','🐙','🦄','🐧','🤖','👽'];
+const CH=[['Advance to START','a',0],['Advance to Koramangala','a',24],['Advance to Marine Drive','a',39],['Take a trip to CST Terminus','a',5],['Advance to Sabarmati','a',11],['Chai Startup dividend! Collect ₹50','m',50],['Get Out of Jail Free!','f'],['Go back 3 spaces','b'],['Go directly to Jail','j'],['Traffic penalty: pay ₹15','m',-15],['Fixed deposit matures: collect ₹150','m',150],['Diwali bonus! Pay each player ₹50','e',-50],['Property renovation: ₹25/flat, ₹100/villa','r',25,100],['Cricket Quiz winner! Collect ₹100','m',100],['Advance to nearest Railway Station','n'],['Speeding ticket: pay ₹60','m',-60]];
+const CC=[['Advance to START','a',0],['Bank error in your favor: collect ₹200','m',200],['Doctor fees: pay ₹50','m',-50],['Stock market gains: collect ₹50','m',50],['Get Out of Jail Free!','f'],['Go directly to Jail','j'],['Festival fund payout: collect ₹100','m',100],['Income tax refund: collect ₹20','m',20],['Wedding Gift! Collect ₹10 from every player','e',10],['LIC policy matures: ₹100','m',100],['Hospital bills: pay ₹100','m',-100],['School fees: pay ₹50','m',-50],['Consultancy fee: collect ₹25','m',25],['Society repairs: ₹40/flat, ₹115/villa','r',40,115],['Fashion show prize: collect ₹10','m',10],['Ancestral inheritance: collect ₹100','m',100]];
+const AV=['🛺','🐘','🐅','🦚','🏏','🪔','🕌','🏎️','👑','🤖'];
 const COL=['#e63946','#2a9d8f','#f4a261','#6a4c93','#3a86ff','#ff006e','#80b918','#ffbe0b','#8d99ae','#00b4d8'];
-const AIN=['Ada','Bolt','Cleo','Dex','Echo','Fizz','Gus','Hana','Ivy'];
+const AIN=['Aarav','Ananya','Vihaan','Isha','Kabir','Diya','Rohan','Meera','Dev'];
 const PERS=[['Cautious',100],['Aggressive',-50],['Balanced',0],['Risk-taker',-80],['Collector',-20]];
 const DIFF={Easy:{buy:.55,res:250,build:0},Normal:{buy:.85,res:200,build:.6},Hard:{buy:.95,res:120,build:.9},Expert:{buy:1,res:80,build:1}};
 
@@ -636,7 +614,7 @@ const log=t=>{NET.bc({t:'log',h:t});const l=$('#log');l.insertAdjacentHTML('afte
 const say=t=>{$('#msg').textContent=t;NET.bc({t:'say',x:t})};
 const fs=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}catch(e){}};
 
-/* ============ AUDIO ENGINE (Web Audio, all synthesized) ============ */
+/* ============ AUDIO ENGINE ============ */
 const A={ctx:null,on:true,mv:.5,sv:.7,mode:'menu',
  init(){if(!this.ctx){try{this.ctx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return}
    this.mg=this.ctx.createGain();this.sg=this.ctx.createGain();this.mg.connect(this.ctx.destination);this.sg.connect(this.ctx.destination);this.vol();this.music()}
@@ -672,7 +650,7 @@ const canM=(i,p)=>!G.mort[i]&&grp(i).every(j=>!G.houses[j]);
 const canU=(i,p)=>G.mort[i]&&p.money>=Math.ceil(S[i][2]*.55);
 const ACT={
  b(i,p){p.money-=HC(i);G.houses[i]++;A.sfx('build');log(`🏗 ${p.name} built on ${S[i][0]}`);uc(i);dash()},
- s(i,p){p.money+=HC(i)/2;G.houses[i]--;A.sfx('cash');log(`${p.name} sold a house on ${S[i][0]}`);uc(i);dash()},
+ s(i,p){p.money+=HC(i)/2;G.houses[i]--;A.sfx('cash');log(`${p.name} sold a flat on ${S[i][0]}`);uc(i);dash()},
  m(i,p){G.mort[i]=1;p.money+=S[i][2]/2;A.sfx('cash');log(`${p.name} mortgaged ${S[i][0]}`);uc(i);dash()},
  u(i,p){G.mort[i]=0;p.money-=Math.ceil(S[i][2]*.55);A.sfx('trade');log(`${p.name} unmortgaged ${S[i][0]}`);uc(i);dash()}};
 
@@ -680,12 +658,12 @@ const ACT={
 function buildBoard(){const b=$('#board');$$('.c').forEach(e=>e.remove());
  S.forEach((s,i)=>{let r,c;if(i<=10){r=11;c=11-i}else if(i<20){c=1;r=21-i}else if(i<=30){r=1;c=i-19}else{c=11;r=i-29}
   const d=document.createElement('div');d.className='c'+(i%10==0?' corner':'');d.id='c'+i;d.style.gridArea=`${r}/${c}`;
-  d.innerHTML=`<div class="bar" style="background:${GC[s[3]]||'transparent'}"></div><div class="nm">${IC[s[1]]||''}${s[0]}</div><div class="pr">${s[2]?'$'+s[2]:''}</div><div class="tk"></div>`;b.appendChild(d)})}
+  d.innerHTML=`<div class="bar" style="background:${GC[s[3]]||'transparent'}"></div><div class="nm">${IC[s[1]]||''}${s[0]}</div><div class="pr">${s[2]?'₹'+s[2]:''}</div><div class="tk"></div>`;b.appendChild(d)})}
 function uc(i){const d=$('#c'+i),h=G.houses[i],o=G.owner[i];d.style.boxShadow=o>=0?`inset 0 0 0 3px ${G.pl[o].col}`:'';d.style.opacity=G.mort[i]?.45:1;
  if(S[i][1]=='p')d.querySelector('.bar').textContent=h==5?'🏨':'🏠'.repeat(h)}
 function tokens(){NET.bc({t:'st',s:snap()});$$('.tk').forEach(e=>e.innerHTML='');G.pl.forEach(p=>{if(!p.out)$('#c'+p.pos+' .tk').insertAdjacentHTML('beforeend',`<span class="tkn" style="background:${p.col}">${p.av}</span>`)})}
-function dash(){NET.bc({t:'st',s:snap()});$('#players').innerHTML=G.pl.map((p,i)=>`<div class="pc ${i==G.t?'act':''} ${p.out?'out':''}" style="border-color:${p.col}"><span class="av">${p.av}</span><span><b>${p.name}</b>${p.ai?`<i>${p.pers}</i>`:''}</span><span class="cash">$${p.money}</span><small>🏘 ${props(p).length} · 🏠 ${hs(p)} · 📍 ${S[p.pos][0]}${p.jail?' 🔒 Jail':''}${p.gojf?' 🎟':''}</small></div>`).join('');
- $('#turn').textContent=`${cur().av} ${cur().name}'s turn`+(G.rules.pot?` · Jackpot $${G.pot}`:'')}
+function dash(){NET.bc({t:'st',s:snap()});$('#players').innerHTML=G.pl.map((p,i)=>`<div class="pc ${i==G.t?'act':''} ${p.out?'out':''}" style="border-color:${p.col}"><span class="av">${p.av}</span><span><b>${p.name}</b>${p.ai?`<i>${p.pers}</i>`:''}</span><span class="cash">₹${p.money}</span><small>🏘 ${props(p).length} · 🏠 ${hs(p)} · 📍 ${S[p.pos][0]}${p.jail?' 🔒 Jail':''}${p.gojf?' 🎟':''}</small></div>`).join('');
+ $('#turn').textContent=`${cur().av} ${cur().name}'s turn`+(G.rules.pot?` · Jackpot ₹${G.pot}`:'')}
 const ask=(m,o,p)=>{say(NET.role&&p?p.name+': '+m:m);if(p&&p.net)return new Promise(res=>{$('#act').innerHTML='';p.net.resolve=i=>{p.net.resolve=null;res(Math.min(Math.max(i|0,0),o.length-1))};NET.to(p.net,{t:'ask',m,o})});return new Promise(res=>{const a=$('#act');a.innerHTML='';o.forEach((t,i)=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{A.sfx('click');a.innerHTML='';res(i)};a.appendChild(b)})})};
 
 /* ---- Money & bankruptcy ---- */
@@ -697,7 +675,7 @@ function bankrupt(p,to){p.out=true;G.order.push(p);A.sfx('bad');log(`💥 ${p.na
 
 /* ---- Movement ---- */
 async function place(p,pos){p.pos=pos;tokens();dash();await sleep(250)}
-async function move(p,n){for(let k=0;k<n;k++){p.pos=(p.pos+1)%40;if(p.pos==0){p.money+=200;A.sfx('cash');log(`${p.name} passed GO (+$200)`)}tokens();A.sfx('move');await sleep(170)}dash()}
+async function move(p,n){for(let k=0;k<n;k++){p.pos=(p.pos+1)%40;if(p.pos==0){p.money+=200;A.sfx('cash');log(`${p.name} passed START (+₹200)`)}tokens();A.sfx('move');await sleep(170)}dash()}
 function goJail(p){p.pos=10;p.jail=1;p.jt=0;A.sfx('bad');log(`🔒 ${p.name} goes to jail`);tokens();dash()}
 
 /* ---- Landing ---- */
@@ -706,21 +684,21 @@ function aiBuy(p,i){const D=p.D,s=S[i];if(p.money<s[2])return false;const comp=s
 async function land(p,r){const s=S[p.pos],t=s[1],i=p.pos;
  if(t=='p'||t=='rr'||t=='u'){const o=G.owner[i];
   if(o<0){let buy;if(p.ai){say(`🤔 ${p.name} is thinking…`);await sleep(900);buy=aiBuy(p,i)}
-   else if(p.money>=s[2])buy=(await ask(`Buy ${s[0]} for $${s[2]}?`,['💵 Buy','Pass'],p))==0;else{log('You cannot afford '+s[0]);buy=false}
-   if(buy){p.money-=s[2];G.owner[i]=p.id;A.sfx('buy');log(`🏠 ${p.name} bought ${s[0]} ($${s[2]})`);uc(i);if(s[1]=='p'&&full(p.id,i))log(`🌈 ${p.name} completed a color group!`)}else log(`${p.name} passed on ${s[0]}`)}
-  else if(o!=p.id&&!G.mort[i]){const a=rent(i,r);log(`💸 ${p.name} pays $${a} rent to ${G.pl[o].name}`);A.sfx('cash');pay(p,a,G.pl[o])}}
- else if(t=='tax'){log(`${p.name} pays $${s[2]} tax`);if(pay(p,s[2],null)&&G.rules.pot)G.pot+=s[2]}
+   else if(p.money>=s[2])buy=(await ask(`Buy ${s[0]} for ₹${s[2]}?`,['💵 Buy','Pass'],p))==0;else{log('You cannot afford '+s[0]);buy=false}
+   if(buy){p.money-=s[2];G.owner[i]=p.id;A.sfx('buy');log(`🏠 ${p.name} bought ${s[0]} (₹${s[2]})`);uc(i);if(s[1]=='p'&&full(p.id,i))log(`🌈 ${p.name} completed a color group!`)}else log(`${p.name} passed on ${s[0]}`)}
+  else if(o!=p.id&&!G.mort[i]){const a=rent(i,r);log(`💸 ${p.name} pays ₹${a} rent to ${G.pl[o].name}`);A.sfx('cash');pay(p,a,G.pl[o])}}
+ else if(t=='tax'){log(`${p.name} pays ₹${s[2]} tax`);if(pay(p,s[2],null)&&G.rules.pot)G.pot+=s[2]}
  else if(t=='cc'||t=='ch')await draw(p,t);
  else if(t=='gj')goJail(p);
- else if(t=='fp'&&G.rules.pot&&G.pot){log(`🎉 ${p.name} wins the jackpot $${G.pot}!`);p.money+=G.pot;G.pot=0;A.sfx('cash')}
+ else if(t=='fp'&&G.rules.pot&&G.pot){log(`🎉 ${p.name} wins the jackpot ₹${G.pot}!`);p.money+=G.pot;G.pot=0;A.sfx('cash')}
  dash();await sleep(300)}
 
 async function draw(p,t){const deck=t=='cc'?CC:CH,d=G.dk[t],c=deck[d.o[d.n++%16]];
- NET.bc({t:'card',k:t,c:c[0]});const cd=$('#card');cd.firstChild.style.background=t=='cc'?'linear-gradient(135deg, #ffe082, #ffca28)':'linear-gradient(135deg, #ffab91, #ff7043)';cd.firstChild.textContent=(t=='cc'?'📦 ':'❓ ')+c[0];cd.style.display='block';cd.firstChild.style.animation='none';cd.firstChild.offsetWidth;cd.firstChild.style.animation='';
+ NET.bc({t:'card',k:t,c:c[0]});const cd=$('#card');cd.firstChild.style.background=t=='cc'?'linear-gradient(135deg, #ffe082, #ffca28)':'linear-gradient(135deg, #ffab91, #ff7043)';cd.firstChild.textContent=(t=='cc'?'📦 ':'🔮 ')+c[0];cd.style.display='block';cd.firstChild.style.animation='none';cd.firstChild.offsetWidth;cd.firstChild.style.animation='';
  A.sfx('card');log(`🃏 ${p.name}: ${c[0]}`);await sleep(2000);NET.bc({t:'card'});cd.style.display='none';
  switch(c[1]){
   case 'm':if(c[2]>0){p.money+=c[2];A.sfx('cash')}else pay(p,-c[2],null);break;
-  case 'a':if(c[2]<p.pos){p.money+=200;log('Passed GO (+$200)')}await place(p,c[2]);await land(p,0);break;
+  case 'a':if(c[2]<p.pos){p.money+=200;log('Passed START (+₹200)')}await place(p,c[2]);await land(p,0);break;
   case 'n':{let n=[5,15,25,35].find(x=>x>p.pos);if(n==null){n=5;p.money+=200}await place(p,n);await land(p,0);break}
   case 'b':await place(p,(p.pos+37)%40);await land(p,0);break;
   case 'j':goJail(p);break;
@@ -736,14 +714,14 @@ async function rollDice(){A.sfx('dice');const ds=$$('.die'),F='⚀⚁⚂⚃⚄�
 /* ---- Turn flow ---- */
 function manage(p){if(p.net)return new Promise(res=>{p.net.mres=()=>{p.net.mres=null;res()};NET.to(p.net,{t:'manage'})});return new Promise(res=>{
  const draw=()=>{const rows=props(p).map(i=>{const s=S[i],h=G.houses[i];return `<div class="row"><span><i class="sw" style="background:${GC[s[3]]||'#888'}"></i>${s[0]} ${h==5?'🏨':'🏠'.repeat(h)}${G.mort[i]?' (mortgaged)':''}</span><span>`+
-  (s[1]=='p'?`<button data-a="b" data-i="${i}" ${canB(i,p)?'':'disabled'}>Build $${HC(i)}</button><button data-a="s" data-i="${i}" ${canS(i,p)?'':'disabled'}>Sell</button>`:'')+
-  (G.mort[i]?`<button data-a="u" data-i="${i}" ${canU(i,p)?'':'disabled'}>Unmortgage $${Math.ceil(s[2]*.55)}</button>`:`<button data-a="m" data-i="${i}" ${canM(i,p)?'':'disabled'}>Mortgage +$${s[2]/2}</button>`)+'</span></div>'}).join('')||'<p>You own no properties yet.</p>';
-  show(`<h2>Manage Properties</h2><p>Cash: <b>$${p.money}</b>. Build evenly across a full color group.</p>${rows}<p><button data-a="x">Close</button></p>`)};
+  (s[1]=='p'?`<button data-a="b" data-i="${i}" ${canB(i,p)?'':'disabled'}>Build ₹${HC(i)}</button><button data-a="s" data-i="${i}" ${canS(i,p)?'':'disabled'}>Sell</button>`:'')+
+  (G.mort[i]?`<button data-a="u" data-i="${i}" ${canU(i,p)?'':'disabled'}>Unmortgage ₹${Math.ceil(s[2]*.55)}</button>`:`<button data-a="m" data-i="${i}" ${canM(i,p)?'':'disabled'}>Mortgage +₹${s[2]/2}</button>`)+'</span></div>'}).join('')||'<p>You own no properties yet.</p>';
+  show(`<h2>Manage Properties</h2><p>Cash: <b>₹${p.money}</b>. Build evenly across a full color group.</p>${rows}<p><button data-a="x">Close</button></p>`)};
  $('#modal').onclick=e=>{const b=e.target.closest('button');if(!b||b.disabled)return;const a=b.dataset.a;if(a=='x'){NET.redraw=null;hide();if(NET.role=='client')NET.send({t:'mclose'});res();return}if(NET.role=='client'){NET.send({t:'act',a,i:+b.dataset.i});return}ACT[a](+b.dataset.i,p);draw()};NET.redraw=draw;draw()})}
 function leaveJail(p,card){if(card)p.gojf--;else if(!pay(p,50,null))return;p.jail=0;log(`🔓 ${p.name} leaves jail`);dash()}
-async function humanPre(p){for(;;){const o=['🎲 Roll','🏗 Manage'];if(p.jail){o.push('Pay $50');if(p.gojf)o.push('🎟 Use card')}
-  const c=await ask(p.jail?'You are in jail: roll doubles, pay $50, or use a card.':'Your turn — roll the dice!',o,p);
-  if(c==0)return;if(c==1){await manage(p);continue}if(o[c]=='Pay $50'){if(p.money>=50){leaveJail(p);return}say('Not enough cash');continue}leaveJail(p,1);return}}
+async function humanPre(p){for(;;){const o=['🎲 Roll','🏗 Manage'];if(p.jail){o.push('Pay ₹50');if(p.gojf)o.push('🎟 Use card')}
+  const c=await ask(p.jail?'You are in jail: roll doubles, pay ₹50, or use a card.':'Your turn — roll the dice!',o,p);
+  if(c==0)return;if(c==1){await manage(p);continue}if(o[c]=='Pay ₹50'){if(p.money>=50){leaveJail(p);return}say('Not enough cash');continue}leaveJail(p,1);return}}
 async function aiPre(p){say(`${p.name} (${p.pers}) is planning…`);await sleep(700);const D=p.D;
  for(const i of props(p))if(G.mort[i]&&p.money>D.res+S[i][2]+150&&canU(i,p))ACT.u(i,p);
  if(Math.random()<D.build)for(let n=0;n<8;n++){const c=props(p).filter(i=>canB(i,p)&&p.money-HC(i)>=D.res+p.mod).sort((a,b)=>G.houses[a]-G.houses[b])[0];if(c==null)break;ACT.b(c,p);await sleep(300)}
@@ -751,7 +729,7 @@ async function aiPre(p){say(`${p.name} (${p.pers}) is planning…`);await sleep(
 async function takeTurn(p){let dbl=0;
  for(;;){dash();say(`${p.name}'s turn`);if(p.ai)await aiPre(p);else await humanPre(p);if(p.out)return;
   const [a,b]=await rollDice(),d=a==b;log(`🎲 ${p.name} rolled ${a}+${b}${d?' (doubles!)':''}`);
-  if(p.jail){if(d){p.jail=0;log(`${p.name} rolled doubles and escapes!`)}else if(++p.jt>=3){log('Third failed attempt: pays $50');pay(p,50,null);p.jail=0}else{say('Still in jail.');await sleep(800);return}
+  if(p.jail){if(d){p.jail=0;log(`${p.name} rolled doubles and escapes!`)}else if(++p.jt>=3){log('Third failed attempt: pays ₹50');pay(p,50,null);p.jail=0}else{say('Still in jail.');await sleep(800);return}
    if(p.out)return;await move(p,a+b);await land(p,a+b);return}
   if(d&&++dbl==3){log('Three doubles in a row!');goJail(p);return}
   await move(p,a+b);await land(p,a+b);
@@ -772,17 +750,17 @@ function initGame(pl,cash,pot,label){pl.forEach((p,i)=>{Object.assign(p,{id:i,co
  $('#mode').textContent=label;NET.bc({t:'start',label});$('#emo').style.display=NET.role?'flex':'none';$('#log').innerHTML='';buildBoard();go('game');tokens();dash();log('🎩 Game started — good luck!');loop()}
 function exitGame(){if(confirm('Exit the current game?')){if(G)G.over=true;NET.close();hide();go('menu')}}
 function over(w){NET.bc({t:'st',s:snap()});NET.bc({t:'over',w:w.id});A.sfx('win');const rk=[w,...G.order.slice().reverse()];
- $('#rank').innerHTML=`<h2 style="margin-top:0">${w.av} ${w.name} wins!</h2>`+rk.map((p,i)=>`<div class="row"><span>#${i+1} ${p.av} ${p.name}${p.ai?' (AI)':''}</span><span>${p.out?'Bankrupt':'Net worth $'+worth(p)} · ${props(p).length} props</span></div>`).join('');
+ $('#rank').innerHTML=`<h2 style="margin-top:0">${w.av} ${w.name} wins!</h2>`+rk.map((p,i)=>`<div class="row"><span>#${i+1} ${p.av} ${p.name}${p.ai?' (AI)':''}</span><span>${p.out?'Bankrupt':'Net worth ₹'+worth(p)} · ${props(p).length} props</span></div>`).join('');
  go('over');for(let i=0;i<70;i++){const e=document.createElement('div');e.className='cf';e.textContent=['🎉','🪙','⭐','🎊'][i%4];e.style.left=Math.random()*100+'vw';e.style.animationDelay=Math.random()*1.5+'s';document.body.appendChild(e);setTimeout(()=>e.remove(),5500)}}
 function settings(){show(`<h2>Settings</h2><label>Music Volume <input type="range" min="0" max="100" value="${A.mv*100}" oninput="A.mv=this.value/100;A.save();A.vol()" style="width:100%"></label><label>Effects Volume <input type="range" min="0" max="100" value="${A.sv*100}" oninput="A.sv=this.value/100;A.save();A.vol()" style="width:100%"></label><p style="margin-top:20px; display:flex; gap:10px;"><button style="flex:1" onclick="A.toggle();settings()">Sound: ${A.on?'ON':'OFF'}</button> <button class="alt" style="flex:1" onclick="hide()">Close</button></p>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
 function howTo(){show(`<h2>📖 How to Play</h2><ol>
-<li>🎯 <b>Goal:</b> Be the last player with money.</li><li>▶️ <b>Start:</b> Choose opponents in Human vs AI and press Start.</li><li>🎲 <b>Roll</b> two dice on your turn. Doubles = roll again; three doubles = jail.</li><li>🚶 Your token moves that many spaces. Passing <b>GO</b> pays $200.</li>
-<li>🏠 <b>Buy</b> an unowned property you land on, or pass.</li><li>💸 <b>Rent:</b> Land on someone's property and you pay. Full color group = double; houses and hotels raise it a lot. Railways and utilities scale with how many are owned.</li>
-<li>🏗 <b>Build</b> via Manage once you own a whole color group. Build evenly; 4 houses, then a hotel.</li><li>🃏 <b>Chance / Community Chest:</b> Draw a card with a surprise.</li>
-<li>🔒 <b>Jail:</b> Roll doubles, pay $50, or use a Get Out of Jail card. After 3 failed tries you pay $50.</li><li>🏦 <b>Mortgage</b> a property (no houses) for half its price; unmortgage for price + 10%.</li><li>💥 <b>Bankruptcy:</b> If you can't pay even after selling houses and mortgaging, you are out!</li>
+<li>🎯 <b>Goal:</b> Be the last player standing with cash.</li><li>▶️ <b>Start:</b> Choose opponents in Human vs AI and press Start.</li><li>🎲 <b>Roll</b> two dice on your turn. Doubles = roll again; three doubles = jail.</li><li>🚶 Your token moves that many spaces. Passing <b>START</b> pays ₹200.</li>
+<li>🏠 <b>Buy</b> an unowned property you land on, or pass.</li><li>💸 <b>Rent:</b> Land on someone's property and you pay. Full color group = double; flats and villas raise it a lot. Railway stations and utilities scale with how many are owned.</li>
+<li>🏗 <b>Build</b> via Manage once you own a whole color group. Build evenly; 4 flats, then a villa.</li><li>🔮 <b>Fate / Community Box:</b> Draw a card with a surprise bonus or penalty.</li>
+<li>🔒 <b>Jail:</b> Roll doubles, pay ₹50, or use a Get Out of Jail card. After 3 failed tries you pay ₹50.</li><li>🏦 <b>Mortgage</b> a property (no flats) for half its price; unmortgage for price + 10%.</li><li>💥 <b>Bankruptcy:</b> If you can't pay even after selling flats and mortgaging, you are out!</li>
 <li>🏆 <b>Win</b> when everyone else is bankrupt.</li></ol><button style="width:100%; margin-top:10px;" onclick="hide()">Got it!</button>`);$('#modal').onclick=e=>{if(e.target.id=='modal')hide()}}
 
-/* ============ NETWORKING: serverless WebRTC DataChannels, manual code-swap signaling ============ */
+/* ============ NETWORKING ============ */
 const EMO=['😀','😂','😎','😡','🎉','👍'];
 const esc=t=>String(t).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
 const snap=()=>({pl:G.pl.map(p=>({name:p.name,av:p.av,ai:p.ai,pers:p.pers,id:p.id,col:p.col,money:p.money,pos:p.pos,jail:p.jail,gojf:p.gojf,out:p.out})),t:G.t,owner:G.owner,houses:G.houses,mort:G.mort,pot:G.pot,rules:G.rules,order:G.order.map(p=>p.id)});
@@ -834,7 +812,7 @@ popt(){return Object.assign({config:this.cfg()},NET_CONFIG.peerServer||{})},
   case 'st':G=G||{over:false};Object.assign(G,m.s);G.order=m.s.order.map(i=>G.pl[i]);for(let i=0;i<40;i++)uc(i);tokens();dash();if(this.redraw)this.redraw();break;
   case 'log':log(m.h);break;case 'say':say(m.x);break;case 'sfx':A.sfx(m.n);break;
   case 'dice':{const F='⚀⚁⚂⚃⚄⚅';$$('.die').forEach((d,i)=>d.textContent=F[m.r[i]-1]);break}
-  case 'card':{const cd=$('#card');if(!m.c){cd.style.display='none';break}cd.firstChild.style.background=m.k=='cc'?'linear-gradient(135deg, #ffe082, #ffca28)':'linear-gradient(135deg, #ffab91, #ff7043)';cd.firstChild.textContent=(m.k=='cc'?'📦 ':'❓ ')+m.c;cd.style.display='block';break}
+  case 'card':{const cd=$('#card');if(!m.c){cd.style.display='none';break}cd.firstChild.style.background=m.k=='cc'?'linear-gradient(135deg, #ffe082, #ffca28)':'linear-gradient(135deg, #ffab91, #ff7043)';cd.firstChild.textContent=(m.k=='cc'?'📦 ':'🔮 ')+m.c;cd.style.display='block';break}
   case 'ask':ask(m.m,m.o).then(i=>this.send({t:'ans',i}));break;
   case 'manage':manage(G.pl[this.me]);break;
   case 'over':over(G.pl[m.w]);break}}};
